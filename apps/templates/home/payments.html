@@ -1,0 +1,110 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Payments {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Payments</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="#!">Payments</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">All Payments</a></li>
+                                    </ul>
+                                    <a href="/add-payment.html" class="">
+                                        <button type="button" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="Import Payments from Excel" aria-describedby="Import Payments from Excel">Import</button>
+                                    </a>
+                                    <a href="/add-payment.html" class="">
+                                        <button type="button" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="Add a manual payment" aria-describedby="Import Payments from Excel">Add Payment</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>First Name</th>
+                                                            <th>Last Name</th>
+                                                            <th>Contact</th>
+                                                            <th>Amount</th>
+                                                            <th>Date</th>
+                                                            <th>Purpose</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row">1</th>
+                                                            <td>Mark</td>
+                                                            <td>Otto</td>
+                                                            <td>@mdo</td>
+                                                            <td>$100</td>
+                                                            <td>Feb 14 2023</td>
+                                                            <td>Medical Clinic</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">2</th>
+                                                            <td>Jacob</td>
+                                                            <td>Thornton</td>
+                                                            <td>@fat</td>
+                                                            <td>$30</td>
+                                                            <td>Feb 14 2023</td>
+                                                            <td>sponsorship</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">3</th>
+                                                            <td>Larry</td>
+                                                            <td>the Bird</td>
+                                                            <td>@twitter</td>
+                                                            <td>$35</td>
+                                                            <td>Feb 14 2023</td>
+                                                            <td>sponsorship</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
