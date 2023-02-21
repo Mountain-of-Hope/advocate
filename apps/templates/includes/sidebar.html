@@ -3,8 +3,9 @@
     <div class="navbar-wrapper">
         <div class="navbar-brand header-logo">
             <a href="/" class="b-brand">
-                <div class="b-bg">
-                    <i class="feather icon-trending-up"></i>
+                <div class="">
+                    <img rel="icon" src="{{ ASSETS_ROOT }}/images/SmallTile.scale-150_rounded.png" type="image/x-icon" width="40" height="40">
+                    {% comment %} <i class="feather icon-trending-up"></i> {% endcomment %}
                 </div>
                 <span class="b-title">Mountain of Hope</span>
             </a>
@@ -58,6 +59,11 @@
                     class="nav-item {% if 'tbl_bootstrap' in segment %} active {% endif %}">
                     <a href="/students.html" class="nav-link "><span class="pcoded-micon"><i
                             class="feather icon-book"></i></span><span class="pcoded-mtext">Students</span></a>
+                </li>
+                <li data-username="Table bootstrap datatable footable" 
+                    class="nav-item {% if 'tbl_bootstrap' in segment %} active {% endif %}">
+                    <a href="/projects.html" class="nav-link "><span class="pcoded-micon"><i
+                            class="feather icon-book"></i></span><span class="pcoded-mtext">Programs &amp; Projects</span></a>
                 </li>
                 
                 <li class="nav-item pcoded-menu-caption">

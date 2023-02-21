@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Payments {% endblock %} 
+{% block title %} Programs {% endblock %} 
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -19,18 +19,18 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12">
                                     <div class="page-header-title">
-                                        <h5 class="m-b-10">Payments</h5>
+                                        <h5 class="m-b-10">Program &amp; Projects</h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="#!">Payments</a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">All Payments</a></li>
+                                        <li class="breadcrumb-item"><a href="#!">Program &amp; Projects</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">All</a></li>
                                     </ul>
-                                    
-                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#importPayment" aria-describedby="Import Payments from Excel">Import</button>
-                                    
-                                    <a href="/add-payment.html" class="">
-                                        <button type="button" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="Add a manual payment" aria-describedby="Import Payments from Excel">Add Payment</button>
+                                    <a href="/add-project.html" class="">
+                                        <button type="button" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="Import Payments from Excel" aria-describedby="Import Payments from Excel">Add Project</button>
+                                    </a>
+                                    <a href="/add-program.html" class="">
+                                        <button type="button" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="Add a manual payment" aria-describedby="Import Payments from Excel">Add Program</button>
                                     </a>
                                 </div>
                             </div>
@@ -50,12 +50,9 @@
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>First Name</th>
-                                                            <th>Last Name</th>
-                                                            <th>Contact</th>
-                                                            <th>Amount</th>
-                                                            <th>Date</th>
-                                                            <th>Purpose</th>
+                                                            <th>Name</th>
+                                                            <th>Type</th>
+                                                            <th>Description</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -64,27 +61,19 @@
                                                             <td>Mark</td>
                                                             <td>Otto</td>
                                                             <td>@mdo</td>
-                                                            <td>$100</td>
-                                                            <td>Feb 14 2023</td>
-                                                            <td>Medical Clinic</td>
+                                                            
                                                         </tr>
                                                         <tr>
                                                             <th scope="row">2</th>
                                                             <td>Jacob</td>
                                                             <td>Thornton</td>
                                                             <td>@fat</td>
-                                                            <td>$30</td>
-                                                            <td>Feb 14 2023</td>
-                                                            <td>sponsorship</td>
                                                         </tr>
                                                         <tr>
                                                             <th scope="row">3</th>
                                                             <td>Larry</td>
                                                             <td>the Bird</td>
                                                             <td>@twitter</td>
-                                                            <td>$35</td>
-                                                            <td>Feb 14 2023</td>
-                                                            <td>sponsorship</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -101,31 +90,6 @@
             </div>
             
         </div>
-        {% comment %} Email Modal {% endcomment %}
-        <div class="modal fade" id="importPayment" tabindex="-1" role="dialog" aria-labelledby="importPaymentModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="importPaymentModalLabel">Import Payments</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="form-group">
-                      <label for="payment-import-file-name" class="col-form-label">Choose a file:</label>
-                      <input type="file" class="form-control" id="payment-import-file">
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Begin Import</button>
-                </div>
-              </div>
-            </div>
-          </div>
     </section>
     <!-- [ Main Content ] end -->
 

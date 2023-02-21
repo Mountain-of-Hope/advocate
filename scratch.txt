@@ -1,3 +1,6 @@
 Potentially use
 
 https://github.com/arrobalytics/django-ledger
+
+2/16 TODO CALEB
+- schedule meeting with partner org for next week

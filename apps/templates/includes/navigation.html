@@ -3,10 +3,11 @@
     <div class="m-header">
         <a class="mobile-menu" id="mobile-collapse1" href="javascript:"><span></span></a>
         <a href="/" class="b-brand">
-            <div class="b-bg">
-                <i class="feather icon-trending-up"></i>
+            <div class="">
+                {% comment %} <i class="feather icon-trending-up"></i> {% endcomment %}
+                <img rel="icon" src="{{ ASSETS_ROOT }}/images/SmallTile.scale-150_rounded.png" type="image/x-icon" width="40" height="40">
             </div>
-            <span class="b-title">Datta Able</span>
+            <span class="b-title">Mountain of Hope</span>
         </a>
     </div>
     <a class="mobile-menu" id="mobile-header" href="javascript:">
@@ -19,7 +20,7 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown">Quick Actions</a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="javascript:">Add Payment</a></li>
+                    <li><a class="dropdown-item" href="./add-payment.html">Add Payment</a></li>
                     <li><a class="dropdown-item" href="javascript:">Generate Monthly Report</a></li>
                 </ul>
             </li>
