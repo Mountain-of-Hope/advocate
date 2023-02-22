@@ -7,11 +7,15 @@ from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
+import datetime
 from django.urls import reverse
+from .models import Payment
 
 
 @login_required(login_url="/login/")
 def index(request):
+    
+    
     context = {'segment': 'index'}
 
     html_template = loader.get_template('home/index.html')
@@ -20,7 +24,8 @@ def index(request):
 
 @login_required(login_url="/login/")
 def pages(request):
-    context = {}
+    pays = Payment.objects.all()
+    context = {'payments':pays}
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
     try:

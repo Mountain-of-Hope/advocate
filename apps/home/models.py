@@ -13,5 +13,10 @@ class Student(models.Model):
     name = models.CharField(max_length=255)
     
 class Payment(models.Model):
+    donor = models.CharField(default="", max_length=255)
+    method = models.CharField(default="check", max_length=255)
+    checkNumber = models.IntegerField(default=0)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
+    date = models.CharField(default="", max_length=255)
     purpose = models.CharField(max_length=255)
+

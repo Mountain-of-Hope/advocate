@@ -48,7 +48,7 @@
 
                     <br />
 
-                    {% if GITHUB_AUTH %}
+                    {% comment %} {% if GITHUB_AUTH %}
                     <div class="mx-2">
                         <form method="post" action="/social_login/github/login/?next=%2F">
                             {% csrf_token %}
@@ -57,7 +57,7 @@
                         </form>
                         <span class="mx-1">Sign IN with GitHub</span>
                     </div>                   
-                    {% endif %}   
+                    {% endif %}  {% endcomment %}  
 
                 </div>
             </div>
