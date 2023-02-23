@@ -34,11 +34,13 @@ CREATE TABLE sponsor_dim (
 CREATE TABLE student_dim (
   student_id INT PRIMARY KEY,
   sponsor_id INT,
+  church_id INT,
   student_name VARCHAR(100) NOT NULL,
   student_address VARCHAR(200),
   student_email VARCHAR(100),
   student_phone VARCHAR(20),
-  FOREIGN KEY (sponsor_id) REFERENCES sponsor_dim(sponsor_id)
+  FOREIGN KEY (sponsor_id) REFERENCES sponsor_dim(sponsor_id),
+  FOREIGN KEY (church_id) REFERENCES church_dim(church_id)
 );
 
 /*
@@ -63,14 +65,18 @@ CREATE TABLE donation_fact (
 Populate the dimension tables with fake data
 */
 
-INSERT INTO sponsor_dim (sponsor_id, church_id, sponsor_name, sponsor_address, sponsor_email, sponsor_phone)
-VALUES (1, 1, 'John Smith', '123 Main St, Anytown USA', 'johnsmith@email.com', '555-1234'),
-       (2, 2, 'Jane Doe', '456 Maple Ave, Somewhere USA', 'janedoe@email.com', '555-5678');
-
 INSERT INTO church_dim (church_id, church_name, church_address, church_email, church_phone)
 VALUES (1, 'John Smith', '123 Main St, Anytown USA', 'johnsmith@email.com', '555-1234'),
       (2, 'Jane Doe', '456 Maple Ave, Somewhere USA', 'janedoe@email.com', '555-5678');
 
+INSERT INTO sponsor_dim (sponsor_id, church_id, sponsor_name, sponsor_address, sponsor_email, sponsor_phone)
+VALUES (1, 1, 'John Smith', '123 Main St, Anytown USA', 'johnsmith@email.com', '555-1234'),
+       (2, 2, 'Jane Doe', '456 Maple Ave, Somewhere USA', 'janedoe@email.com', '555-5678');
+     
+INSERT INTO student_dim (student_id, sponsor_id, church_id, student_name, student_address, student_email, student_phone)
+VALUES (1, 1, 1, 'John Smith', '123 Main St, Anytown USA', 'johnsmith@email.com', '555-1234'),
+      (2, 1, 2, 'Jane Doe', '456 Maple Ave, Somewhere USA', 'janedoe@email.com', '555-5678');
+     
 INSERT INTO time_dim (date_key, date_actual, year, quarter, month, day_of_month, day_of_week, week_of_year)
 VALUES (20220216, '2022-02-16', 2022, 1, 2, 16, 4, 7),
        (20220217, '2022-02-17', 2022, 1, 2, 17, 5, 7),
@@ -79,7 +85,7 @@ VALUES (20220216, '2022-02-16', 2022, 1, 2, 16, 4, 7),
 /*
 Populate the donation fact table with fake data
 */
-INSERT INTO donation_fact (donation_id, sponsor_id, church_id, donation_amount, donation_date, donation_type)
-VALUES (1, 1, 1, 100.00, '2022-02-16', 'General'),
-       (2, 1, 1, 50.00, '2022-02-17', 'General'),
-       (3, 2, 2, 75.00, '2022-02-18', 'General');
+INSERT INTO donation_fact (donation_id, student_id, sponsor_id, church_id, donation_amount, donation_date, donation_type)
+VALUES (1, 1, 1, 1, 100.00, '2022-02-16', 'General'),
+       (2, 1, 1, 1, 50.00, '2022-02-17', 'General'),
+       (3, 1, 2, 2, 75.00, '2022-02-18', 'General');
