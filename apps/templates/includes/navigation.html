@@ -20,7 +20,9 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown">Quick Actions</a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="./add-payment.html">Add Payment</a></li>
+                    
+                    <li><a class="dropdown-item" data-toggle="modal" data-original-title="Add a manual payment" data-target="#paymentModal" aria-describedby="Import Payments from Excel">Add Payment</a></li>
+                
                     <li><a class="dropdown-item" href="javascript:">Generate Monthly Report</a></li>
                 </ul>
             </li>
@@ -132,4 +134,61 @@
         </ul>
     </div>
 </header>
+
+{% comment %} Payment Modal {% endcomment %}
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentModalLabel">Log Payment</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    {{form.as_table}}
+                </table>
+                <input type="submit" value="Submit">
+            </form>
+          {% comment %} <form role="form" method="post" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="addPaymentSponsor">Sponsor</label>
+                <input type="text" class="form-control" id="addPaymentSponsor" aria-describedby="emailHelp" placeholder="Start typing the sponsor's name" required>
+            </div>
+            <div class="form-group">
+                <label for="addPaymentMethod">Method</label>
+                <select class="form-control" id="addPaymentMethod" required>
+                    <option>Check</option>
+                    <option>Online</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="addPaymentCheckNum">Check #</label>
+                <input type="number" class="form-control" id="addPaymentCheckNum" aria-describedby="emailHelp" placeholder="Required if payment is by check">
+            </div>
+            <div class="form-group">
+                <label for="addPaymentAmount">Amount</label>
+                <input type="number" min="0.01" step="0.01" class="form-control" id="addPaymentAmount" placeholder="Enter amount" required>
+            </div>
+            <div class="form-group">
+                <label for="addPaymentDate">Date</label>
+                <input type="date" class="form-control" id="addPaymentDate" required>
+            </div>
+            <div class="form-group">
+                <label for="addPaymentPurpose">Purpose</label>
+                <input type="text" class="form-control" id="addPaymentPurpose" placeholder="What was the payment for?" required>
+            </div>
+          </form> {% endcomment %}
+        </div>
+        <div class="modal-footer">
+          {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div>
 <!-- [ Header ] end -->

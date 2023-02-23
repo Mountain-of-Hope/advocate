@@ -1,3 +1,4 @@
+
 {% extends "layouts/base.html" %}
 
 {% block title %} UI Forms {% endblock %} 
@@ -36,7 +37,39 @@
                             <!-- [ Main Content ] start -->
                             <div class="row">
                                 <div class="col-sm-12">
+
                                     <div class="card">
+                                        
+
+
+                                        <div class="card-body text-center">
+                                            
+                                            <h3 class="mb-4">Add the payment details below</h3>
+                                            <form action="" method="post">
+                                                {% csrf_token %}
+                                                <table>
+                                                    {{form.as_table}}
+                                                    <input type="submit" value="Submit">
+
+                                                </table>
+                                                {% comment %} <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" placeholder="Donor Name">
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" placeholder="How did the donor pay?">
+                                                </div>
+                                                <div class="input-group mb-4">
+                                                    <input type="text" class="form-control" placeholder="Date">
+                                                </div>
+                                                <div class="input-group mb-4">
+                                                    <input type="text" class="form-control" placeholder="Purpose">
+                                                </div>
+                                                <button class="btn btn-primary shadow-2 mb-4">Save</button> {% endcomment %}
+                                            </form>
+                                            
+                                        </div>
+                                    </div>
+                                    {% comment %} <div class="card">
                                         <div class="card-header">
                                             <h5>Add the payment details below</h5>
                                         </div>
@@ -84,7 +117,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> {% endcomment %}
                                 </div>
                             </div>
                             <!-- [ Main Content ] end -->

@@ -30,7 +30,9 @@
                                         <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#importPayment" aria-describedby="Import Payments from Excel">Import</button>
                                     
                                     
+
                                         <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a manual payment" data-target="#paymentModal" aria-describedby="Import Payments from Excel">Add Payment</button>
+                                    
                                         
                                    
                                 </div>
@@ -87,8 +89,12 @@
                     </div>
                 </div>
             </div>
+
+            
             
         </div>
+
+
         {% comment %} Payment Modal {% endcomment %}
         <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -100,7 +106,14 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form role="form" method="post" action="">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <table>
+                            {{form.as_table}}
+                        </table>
+                        <input type="submit" value="Submit">
+                    </form>
+                  {% comment %} <form role="form" method="post" action="">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="addPaymentSponsor">Sponsor</label>
@@ -129,11 +142,11 @@
                         <label for="addPaymentPurpose">Purpose</label>
                         <input type="text" class="form-control" id="addPaymentPurpose" placeholder="What was the payment for?" required>
                     </div>
-                  </form>
+                  </form> {% endcomment %}
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary" >Save</button>
+                  {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save</button> {% endcomment %}
                 </div>
               </div>
             </div>

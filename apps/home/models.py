@@ -20,3 +20,4 @@ class Payment(models.Model):
     date = models.CharField(default="", max_length=255)
     purpose = models.CharField(max_length=255)
 
+
