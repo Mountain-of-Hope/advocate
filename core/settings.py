@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount',                        # OAuth new 
     'allauth.socialaccount.providers.github',       # OAuth new 
     'allauth.socialaccount.providers.twitter',      # OAuth new  
-    "sslserver"    
+    "sslserver",
+    "address",
+    "phonenumber_field"
 ]
 
 MIDDLEWARE = [
@@ -63,6 +65,7 @@ ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
 LOGOUT_REDIRECT_URL = "home"  # Route defined in home/urls.py
 TEMPLATE_DIR = os.path.join(CORE_DIR, "apps/templates")  # ROOT dir for templates
+
 
 TEMPLATES = [
     {
@@ -148,6 +151,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(CORE_DIR, 'apps/static'),
 ) 
+
+#############################################################
+# Google Maps API
+GOOGLE_API_KEY = 'AIzaSyD6dmjF-mW6emdu0JSYwXak8f5q8d7HHnM'
 
 #############################################################
 # OAuth settings 

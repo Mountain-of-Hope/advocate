@@ -5,8 +5,23 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import forms
 from django.forms import ModelForm
-from .models import Payment
+from .models import Payment, Church, Donor, Student
 
+
+class DonorForm(ModelForm):
+    class Meta:
+        model = Donor
+        fields = '__all__'
+
+class StudentForm(ModelForm):
+    class Meta:
+        model = Student
+        fields = '__all__'
+
+class ChurchForm(ModelForm):
+    class Meta:
+        model = Church
+        fields = '__all__'
 
 class PaymentForm(ModelForm):
     class Meta:

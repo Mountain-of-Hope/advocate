@@ -12,3 +12,7 @@ django-environ==0.9.0
 django-allauth==0.52.0
 django-feather==0.3.0
 django-sslserver
+django-address==0.2.8
+django-phonenumber-field
+phonenumbers
+

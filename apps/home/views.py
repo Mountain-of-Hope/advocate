@@ -7,10 +7,11 @@ from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .forms import PaymentForm
+from .forms import PaymentForm, ChurchForm, DonorForm, StudentForm
 from django.urls import reverse
-from .models import Payment
+from .models import Payment, Student, Church, Donor
 from django.shortcuts import render
+from datetime import datetime
 
 
 @login_required(login_url="/login/")
@@ -19,15 +20,15 @@ def index(request):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
-            test = Payment()
-            test.donor = form['donor'].data
-            test.amount = form['amount'].data
-            test.checkNumber = form['checkNumber'].data
-            test.date = form['date'].data
-            test.purpose = form['purpose'].data
-            test.method = form['method'].data
+            pay = Payment()
+            pay.donor = form['donor'].data
+            pay.amount = form['amount'].data
+            pay.checkNumber = form['checkNumber'].data
+            pay.date = form['date'].data
+            pay.purpose = form['purpose'].data
+            pay.method = form['method'].data
 
-            test.save()
+            pay.save()
             return HttpResponseRedirect('payments.html')
     else:
         form = PaymentForm()
@@ -45,7 +46,9 @@ def index(request):
 @login_required(login_url="/login/")
 def pages(request):
     pays = Payment.objects.all()
+    students = Student.objects.all()
     context = {'payments':pays}
+    context = {'students':students}
 
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
@@ -56,23 +59,40 @@ def pages(request):
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
         
-        # hacked, needs to be refactored
+        # hacked, needs to be refactored, extract to individual methods
         if load_template == 'payments.html':
             if request.method == 'POST':
                 form = PaymentForm(request.POST)
                 if form.is_valid():
-                    test = Payment()
-                    test.donor = form['donor'].data
-                    test.amount = form['amount'].data
-                    test.checkNumber = form['checkNumber'].data
-                    test.date = form['date'].data
-                    test.purpose = form['purpose'].data
-                    test.method = form['method'].data
-
-                    test.save()
+                    pay = Payment()
+                    pay.donor = form['donor'].data
+                    pay.amount = form['amount'].data
+                    pay.checkNumber = form['checkNumber'].data
+                    pay.date = form['date'].data
+                    pay.purpose = form['purpose'].data
+                    pay.method = form['method'].data
+                    pay.save()
+                    
                     return HttpResponseRedirect('payments.html')
             else:
                 form = PaymentForm()
+                context['form'] = form
+            
+        if load_template == 'students.html':
+            form = StudentForm(request.POST)
+            if form.is_valid():
+                student = Student()
+                student.name = form['name'].data
+                student.dob = form['dob'].data
+                student.community = form['community'].data
+                student.program = form['program'].data
+                student.grade = form['grade'].data
+                student.enroll_date = datetime.now()
+                student.save()
+        
+                return HttpResponseRedirect('students.html')
+            else:
+                form = StudentForm()
                 context['form'] = form
                     
         
