@@ -2,7 +2,7 @@
 
 from django.db import models
 from address.models import AddressField
-from phonenumber_field.phonenumber import PhoneNumber
+# from phonenumber_field.phonenumber
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -11,13 +11,13 @@ class Church (models.Model):
     name = models.CharField(max_length=255)
     address = AddressField()
     email = models.EmailField()
-    phone = PhoneNumber()
+    # phone = PhoneNumber()
 
 class Donor (models.Model):
     name = models.CharField(max_length=255)
     address = AddressField()
     email = models.EmailField(null=True)
-    phone = PhoneNumber()
+    # phone = PhoneNumber()
 
 class Student(models.Model):
     enroll_date = models.DateField(null=True)

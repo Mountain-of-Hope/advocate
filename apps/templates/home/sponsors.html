@@ -30,7 +30,7 @@
                                         <button type="button" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="Import Sponsors from Excel" aria-describedby="Import Payments from Excel">Import</button>
                                     </a>
                                     
-                                    <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a manual payment" data-target="#paymentModal" aria-describedby="Import Payments from Excel">Add Student</button>
+                                    <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a manual payment" data-target="#paymentModal" aria-describedby="Import Payments from Excel">Add Sponsor</button>
                                     
                                 </div>
                             </div>
@@ -50,38 +50,21 @@
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>First Name</th>
-                                                            <th>Last Name</th>
-                                                            <th>Contact</th>
-                                                            <th>Joined Date</th>
+                                                            <th>Name</th>
+                                                            <th>Email</th>
+                                                            <th>Address</th>
                                                             <th>Student</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        {% for i in donors %}
                                                         <tr>
-                                                            <th scope="row">1</th>
-                                                            <td>Mark</td>
-                                                            <td>Otto</td>
-                                                            <td>@mdo</td>
-                                                            <td>Feb 14 2023</td>
-                                                            <td>Jeff Bagwell</td>
+                                                            <th scope="row">{{i.id}}</th>
+                                                            <td>{{i.name}}</td>
+                                                            <td>{{i.email}}</td>
+                                                            <td>{{i.address}}</td>
                                                         </tr>
-                                                        <tr>
-                                                            <th scope="row">2</th>
-                                                            <td>Jacob</td>
-                                                            <td>Thornton</td>
-                                                            <td>@fat</td>
-                                                            <td>Feb 14 2023</td>
-                                                            <td>Craig Biggio</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">3</th>
-                                                            <td>Larry</td>
-                                                            <td>the Bird</td>
-                                                            <td>@twitter</td>
-                                                            <td>Feb 14 2023</td>
-                                                            <td>Derrick Bell</td>
-                                                        </tr>
+                                                        {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>

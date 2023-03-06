@@ -16,7 +16,7 @@ class DonorForm(ModelForm):
 class StudentForm(ModelForm):
     class Meta:
         model = Student
-        fields = '__all__'
+        exclude = ['enroll_date']
 
 class ChurchForm(ModelForm):
     class Meta:

@@ -47,8 +47,9 @@ def index(request):
 def pages(request):
     pays = Payment.objects.all()
     students = Student.objects.all()
-    context = {'payments':pays}
-    context = {'students':students}
+    donors = Donor.objects.all()
+    context = {'students':students, 'payments':pays, 'donors':donors}
+    
 
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
@@ -77,13 +78,15 @@ def pages(request):
             else:
                 form = PaymentForm()
                 context['form'] = form
+                
             
         if load_template == 'students.html':
             form = StudentForm(request.POST)
             if form.is_valid():
                 student = Student()
                 student.name = form['name'].data
-                student.dob = form['dob'].data
+                cleaned_dob = datetime.strptime(form['dob'].data, "%m/%d/%Y")
+                student.dob = cleaned_dob
                 student.community = form['community'].data
                 student.program = form['program'].data
                 student.grade = form['grade'].data
@@ -94,6 +97,22 @@ def pages(request):
             else:
                 form = StudentForm()
                 context['form'] = form
+
+        if load_template == 'sponsors.html':
+            form = DonorForm(request.POST)
+            if form.is_valid():
+                donor = Donor()
+                donor.name = form['name'].data
+                donor.address = form['address'].data
+                donor.email = form['email'].data
+                donor.save()
+        
+                return HttpResponseRedirect('sponsors.html')
+            else:
+                form = DonorForm()
+                context['form'] = form
+
+        
                     
         
         
