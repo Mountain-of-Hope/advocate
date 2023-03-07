@@ -52,6 +52,7 @@
                                                             <th>#</th>
                                                             <th>Name</th>
                                                             <th>Email</th>
+                                                            <th>Phone</th>
                                                             <th>Address</th>
                                                             <th>Student</th>
                                                         </tr>
@@ -61,8 +62,32 @@
                                                         <tr>
                                                             <th scope="row">{{i.id}}</th>
                                                             <td>{{i.name}}</td>
-                                                            <td>{{i.email}}</td>
-                                                            <td>{{i.address}}</td>
+
+                                                            {% if i.email == '' %}
+                                                                <td>-</td>
+                                                            {% else %}
+                                                                <td>{{i.email}}</td>
+                                                            {% endif %}
+                                                            
+                                                            {% if i.phone == '' %}
+                                                                <td>-</td>
+                                                            {% else %}
+                                                                <td>{{i.phone}}</td>
+                                                            {% endif %}
+
+                                                            {% if i.address == '' %}
+                                                                <td>-</td>
+                                                            {% else %}
+                                                                <td>{{i.address}}</td>
+                                                            {% endif %}
+
+
+                                                            {% for s in i.student_set.all %}
+                                                                <td>{{s.name}}</td>
+                                                            {% empty %}
+                                                                <td>-</td>
+                                                            {% endfor%} 
+
                                                         </tr>
                                                         {% endfor %}
                                                     </tbody>

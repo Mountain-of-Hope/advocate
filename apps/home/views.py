@@ -105,6 +105,7 @@ def pages(request):
                 donor.name = form['name'].data
                 donor.address = form['address'].data
                 donor.email = form['email'].data
+                donor.phone = form['phone'].data
                 donor.save()
         
                 return HttpResponseRedirect('sponsors.html')

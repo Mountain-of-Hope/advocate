@@ -13,6 +13,14 @@ class DonorForm(ModelForm):
         model = Donor
         fields = '__all__'
 
+    # we should have a conversation about what info is required
+    def __init__(self, *args, **kwargs):
+        super(DonorForm, self).__init__(*args, **kwargs)
+        self.fields['address'].required = False
+        self.fields['email'].required = False
+        self.fields['phone'].required = False
+
+
 class StudentForm(ModelForm):
     class Meta:
         model = Student
