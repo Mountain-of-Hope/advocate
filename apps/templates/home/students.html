@@ -60,7 +60,7 @@
                                                         {% for i in students %}
                                                         <tr>
                                                             <th scope="row">{{i.id}}</th>
-                                                            <td>{{i.name}}</td>
+                                                            <td><a href="student/{{i.id}}">{{i.name}}</a></td>
                                                             <td>{{i.sponsor}}</td>
                                                             <td>{{i.program}}</td>
                                                             <td>{{i.community}}</td>
