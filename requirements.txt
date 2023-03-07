@@ -15,4 +15,4 @@ django-sslserver
 django-address==0.2.8
 django-phonenumber-field
 phonenumbers
-
+django-pwa

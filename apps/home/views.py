@@ -7,9 +7,9 @@ from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .forms import PaymentForm, ChurchForm, DonorForm, StudentForm
+from .forms import PaymentForm, ChurchForm, DonorForm, StudentForm, ProgramForm
 from django.urls import reverse
-from .models import Payment, Student, Church, Donor
+from .models import Payment, Student, Church, Donor, Program
 from django.shortcuts import render
 from datetime import datetime
 
@@ -21,7 +21,7 @@ def index(request):
         form = PaymentForm(request.POST)
         if form.is_valid():
             pay = Payment()
-            pay.donor = form['donor'].data
+            pay.donor = Donor.objects.get(pk=form['donor'].data)
             pay.amount = form['amount'].data
             pay.checkNumber = form['checkNumber'].data
             pay.date = form['date'].data
@@ -48,7 +48,8 @@ def pages(request):
     pays = Payment.objects.all()
     students = Student.objects.all()
     donors = Donor.objects.all()
-    context = {'students':students, 'payments':pays, 'donors':donors}
+    projects = Program.objects.all()
+    context = {'students':students, 'payments':pays, 'donors':donors, 'projects':projects}
     
 
     # All resource paths end in .html.
@@ -66,7 +67,7 @@ def pages(request):
                 form = PaymentForm(request.POST)
                 if form.is_valid():
                     pay = Payment()
-                    pay.donor = form['donor'].data
+                    pay.donor = Donor.objects.get(pk=form['donor'].data)
                     pay.amount = form['amount'].data
                     pay.checkNumber = form['checkNumber'].data
                     pay.date = form['date'].data
@@ -83,16 +84,15 @@ def pages(request):
         if load_template == 'students.html':
             form = StudentForm(request.POST)
             if form.is_valid():
-                student = Student()
-                student.name = form['name'].data
-                cleaned_dob = datetime.strptime(form['dob'].data, "%m/%d/%Y")
-                student.dob = cleaned_dob
-                student.community = form['community'].data
-                student.program = form['program'].data
-                student.grade = form['grade'].data
+                student = form.save(commit=False)
                 student.enroll_date = datetime.now()
                 student.save()
-        
+                newSponsor = form.cleaned_data['sponsor'].first()
+                student.sponsor.add(newSponsor)
+                form.save_m2m()
+                
+                
+
                 return HttpResponseRedirect('students.html')
             else:
                 form = StudentForm()
@@ -111,6 +111,21 @@ def pages(request):
                 return HttpResponseRedirect('sponsors.html')
             else:
                 form = DonorForm()
+                context['form'] = form
+
+
+        if load_template == 'projects.html':
+            form = ProgramForm(request.POST)
+            if form.is_valid():
+                program = Program()
+                program.name = form['name'].data
+                program.type = form['type'].data
+                program.description = form['description'].data
+                program.save()
+
+                return HttpResponseRedirect('projects.html')
+            else:
+                form = ProgramForm()
                 context['form'] = form
 
         
