@@ -129,9 +129,6 @@ def pages(request):
                 context['form'] = form
 
         
-                    
-        
-        
         context['segment'] = load_template
 
         html_template = loader.get_template('home/' + load_template)
@@ -145,3 +142,12 @@ def pages(request):
     #except:
         #html_template = loader.get_template('home/page-500.html')
         #return HttpResponse(html_template.render(context, request))
+
+@login_required
+def Student_Detail(request, id):
+    student = Student.objects.get(id=id)
+    template = loader.get_template('home/student.html')
+    context = {
+        'student':student,
+    }
+    return HttpResponse(template.render(context, request))
