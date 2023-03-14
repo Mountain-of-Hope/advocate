@@ -144,10 +144,37 @@ def pages(request):
         #return HttpResponse(html_template.render(context, request))
 
 @login_required
+def Payment_Detail(request, id):
+    payment = Payment.objects.get(id=id)
+    template = loader.get_template('home/payment.html')
+    context = {
+        'payment':payment,
+    }
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def Sponsor_Detail(request, id):
+    sponsor = Donor.objects.get(id=id)
+    template = loader.get_template('home/sponsor.html')
+    context = {
+        'sponsor':sponsor,
+    }
+    return HttpResponse(template.render(context, request))
+
+@login_required
 def Student_Detail(request, id):
     student = Student.objects.get(id=id)
     template = loader.get_template('home/student.html')
     context = {
         'student':student,
+    }
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def Program_Detail(request, id):
+    program = Program.objects.get(id=id)
+    template = loader.get_template('home/program.html')
+    context = {
+        'program':program,
     }
     return HttpResponse(template.render(context, request))

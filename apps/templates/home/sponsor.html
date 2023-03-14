@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Payment Details {% endblock %} 
+{% block title %} Donor/Sponsor Details {% endblock %} 
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -20,7 +20,7 @@
                                 <div class="col-sm-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Edit Donation</h5>
+                                            <h5>Edit Donor</h5>
                                         </div>
                                         <div class="card-block">
                                             <div class="row">
@@ -34,40 +34,32 @@
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label for="ln">Method</label>
+                                                        <label for="ln">Email</label>
                                                         <input type="email" class="form-control" id="ln" aria-describedby="emailHelp" {{student.dob}}="">
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label for="add">Amount</label>
+                                                        <label for="add">Phone</label>
                                                         <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.program}}">
                                                         <small id="addd" class="form-text text-muted"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label for="add">Date</label>
+                                                        <label for="add">Address</label>
                                                         <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.community}}">
                                                         <small id="addd" class="form-text text-muted"></small>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label for="add">Date</label>
+                                                        <label for="add">Student(s)</label>
                                                         <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.grade}}">
                                                         <small id="addd" class="form-text text-muted"></small>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 mb-4">
-                                                    <div class="form-group">
-                                                        <label for="add">Purpose</label>
-                                                        <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.sponsor}}">
-                                                        <small id="addd" class="form-text text-muted"></small>
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-primary">Submit</button>

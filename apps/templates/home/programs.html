@@ -54,7 +54,7 @@
                                                         {% for i in projects %}
                                                         <tr>
                                                             <th scope="row">{{i.id}}</th>
-                                                            <td>{{i.name}}</td>
+                                                            <td><a href="program/{{i.id}}">{{i.name}}</a></td>
                                                             <td>{{i.type}}</td>
 
                                                             {% if i.description == '' %}

@@ -61,7 +61,7 @@
                                                         {% for i in donors %}
                                                         <tr>
                                                             <th scope="row">{{i.id}}</th>
-                                                            <td>{{i.name}}</td>
+                                                            <td><a href="sponsor/{{i.id}}">{{i.name}}</a></td>
 
                                                             {% if i.email == '' %}
                                                                 <td>-</td>

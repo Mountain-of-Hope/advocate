@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Payment Details {% endblock %} 
+{% block title %} Student Details {% endblock %} 
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -28,42 +28,21 @@
                                                 
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label for="fn">Donor Name</label>
+                                                        <label for="fn">Program/Project Name</label>
                                                         <input type="email" class="form-control" id="fn" aria-describedby="emailHelp" placeholder="{{student.name}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label for="ln">Method</label>
+                                                        <label for="ln">Type</label>
                                                         <input type="email" class="form-control" id="ln" aria-describedby="emailHelp" {{student.dob}}="">
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label for="add">Amount</label>
+                                                        <label for="add">Description</label>
                                                         <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.program}}">
-                                                        <small id="addd" class="form-text text-muted"></small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12 mb-4">
-                                                    <div class="form-group">
-                                                        <label for="add">Date</label>
-                                                        <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.community}}">
-                                                        <small id="addd" class="form-text text-muted"></small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12 mb-4">
-                                                    <div class="form-group">
-                                                        <label for="add">Date</label>
-                                                        <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.grade}}">
-                                                        <small id="addd" class="form-text text-muted"></small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12 mb-4">
-                                                    <div class="form-group">
-                                                        <label for="add">Purpose</label>
-                                                        <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.sponsor}}">
                                                         <small id="addd" class="form-text text-muted"></small>
                                                     </div>
                                                 </div>
@@ -78,6 +57,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
                             <!-- [ Main Content ] end -->
                         </div>

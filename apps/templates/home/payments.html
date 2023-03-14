@@ -72,7 +72,9 @@
                                                             <td>{{i.date}}</td>
                                                             <td>{{i.purpose}}</td>
                                                             <td> 
-                                                                <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit" data-toggle="modal" data-target="#emailModal"></button>
+                                                                <a href="payment/{{i.id}}">
+                                                                    <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit" data-toggle="modal" data-target="#emailModal"></button>
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                         {% endfor %}
