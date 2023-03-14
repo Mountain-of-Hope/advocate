@@ -10,7 +10,7 @@ from django.template import loader
 from .forms import PaymentForm, ChurchForm, DonorForm, StudentForm, ProgramForm
 from django.urls import reverse
 from .models import Payment, Student, Church, Donor, Program
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from datetime import datetime
 
 
@@ -42,7 +42,7 @@ def index(request):
     return HttpResponse(html_template.render(context, request))
 
 
-
+# needs to be refactored to use dedicated functions for each view
 @login_required(login_url="/login/")
 def pages(request):
     pays = Payment.objects.all()
@@ -147,8 +147,18 @@ def pages(request):
 def Payment_Detail(request, id):
     payment = Payment.objects.get(id=id)
     template = loader.get_template('home/payment.html')
+
+    if request.method == 'POST':
+        form = PaymentForm(request.POST, instance=payment)
+        if form.is_valid():
+            form.save()
+            return redirect('payments.html')
+    else:
+        payform = PaymentForm(instance=payment)
+
     context = {
         'payment':payment,
+        'form':payform,
     }
     return HttpResponse(template.render(context, request))
 
@@ -156,8 +166,18 @@ def Payment_Detail(request, id):
 def Sponsor_Detail(request, id):
     sponsor = Donor.objects.get(id=id)
     template = loader.get_template('home/sponsor.html')
+
+    if request.method == 'POST':
+        form = DonorForm(request.POST, instance=sponsor)
+        if form.is_valid():
+            form.save()
+            return redirect('sponsors.html')
+    else:
+        sponsorform = DonorForm(instance=sponsor) 
+
     context = {
         'sponsor':sponsor,
+        'form': sponsorform,
     }
     return HttpResponse(template.render(context, request))
 
@@ -165,8 +185,18 @@ def Sponsor_Detail(request, id):
 def Student_Detail(request, id):
     student = Student.objects.get(id=id)
     template = loader.get_template('home/student.html')
+
+    if request.method == 'POST':
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('students.html')
+    else:
+        studentform = StudentForm(instance=student) 
+
     context = {
         'student':student,
+        'form': studentform,
     }
     return HttpResponse(template.render(context, request))
 

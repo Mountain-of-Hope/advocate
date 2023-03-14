@@ -25,8 +25,14 @@
                                         <div class="card-block">
                                             <div class="row">
 
+                                                <form action="{{sponsor.id}}" method="POST">
+                                                    {% csrf_token %}
+                                                    {{form.as_p}}
+                                                    <input type="submit" value="Submit">
+                                                </form>
+
                                                 
-                                                <div class="col-sm-6 mb-4">
+                                                {% comment %} <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
                                                         <label for="fn">Donor Name</label>
                                                         <input type="email" class="form-control" id="fn" aria-describedby="emailHelp" placeholder="{{student.name}}">
@@ -64,7 +70,7 @@
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-primary">Submit</button>
                                                     </div>
-                                                </div>   
+                                                </div>    {% endcomment %}
 
                                             </div>
                                         </div>

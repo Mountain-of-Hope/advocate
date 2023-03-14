@@ -24,9 +24,14 @@
                                         </div>
                                         <div class="card-block">
                                             <div class="row">
+                                                <form action="{{payment.id}}" method="POST">
+                                                    {% csrf_token %}
+                                                    {{form.as_p}}
+                                                    <input type="submit" value="Submit">
+                                                </form>
 
                                                 
-                                                <div class="col-sm-6 mb-4">
+                                                {% comment %} <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
                                                         <label for="fn">Donor Name</label>
                                                         <input type="email" class="form-control" id="fn" aria-describedby="emailHelp" placeholder="{{student.name}}">
@@ -66,13 +71,13 @@
                                                         <input type="email" class="form-control" id="add" aria-describedby="emailHelp" placeholder="{{student.sponsor}}">
                                                         <small id="addd" class="form-text text-muted"></small>
                                                     </div>
-                                                </div>
+                                                </div> {% endcomment %}
 
-                                                <div class="col-sm-12 mb-2">
+                                                {% comment %} <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-primary">Submit</button>
                                                     </div>
-                                                </div>   
+                                                </div>    {% endcomment %}
 
                                             </div>
                                         </div>
