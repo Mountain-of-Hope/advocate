@@ -16,6 +16,9 @@ urlpatterns = [
     path('student/<int:id>', views.Student_Detail, name='student_details'),
     path('program/<int:id>', views.Program_Detail, name='program_details'),
 
+    # REMOVE IN PRODUCTION, FOR TESTING ONLY
+    path('sdfkj2944ss/delete.html', views.Delete_Data, name='delete_data'),
+
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 

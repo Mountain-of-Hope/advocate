@@ -39,7 +39,7 @@
                                             <h5>Import Data</h5>
                                         </div> {% endcomment %}
                                         <div class="card-block">
-                                            <p>Stay tuned for more here!</p>
+                                            <button type="button" class="btn btn-danger" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#dbDelete" aria-describedby="Import Payments from Excel">Clear Database</button>
                                         </div>
                                     </div>
                                 </div>
@@ -51,6 +51,23 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="dbDelete" tabindex="-1" role="dialog" aria-labelledby="dbDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="dbDeleteModalLabel">Are you really sure?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-footer">
+                {% comment %} FOR DEV TESTING ONLY!!! COMMENT OUT DURING PRODUCTION {% endcomment %}
+              <a href="/sdfkj2944ss/delete.html" method="POST" name="delete" action=""><button  type="button" class="btn btn-danger">I'm sure, delete everything in the Advocate database</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
     <!-- [ Main Content ] end -->
 
 {% endblock content %}

@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Student Details {% endblock %} 
+{% block title %} Program/Project Details {% endblock %} 
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -20,13 +20,19 @@
                                 <div class="col-sm-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Edit Donation</h5>
+                                            <h5>Edit Program/Project</h5>
                                         </div>
                                         <div class="card-block">
                                             <div class="row">
 
+                                                <form action="{{sponsor.id}}" method="POST">
+                                                    {% csrf_token %}
+                                                    {{form.as_p}}
+                                                    <input type="submit" value="Submit">
+                                                </form>
+
                                                 
-                                                <div class="col-sm-6 mb-4">
+                                                {% comment %} <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
                                                         <label for="fn">Program/Project Name</label>
                                                         <input type="email" class="form-control" id="fn" aria-describedby="emailHelp" placeholder="{{student.name}}">
@@ -51,7 +57,7 @@
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-primary">Submit</button>
                                                     </div>
-                                                </div>   
+                                                </div>    {% endcomment %}
 
                                             </div>
                                         </div>

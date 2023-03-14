@@ -114,7 +114,7 @@ def pages(request):
                 context['form'] = form
 
 
-        if load_template == 'projects.html':
+        if load_template == 'programs.html':
             form = ProgramForm(request.POST)
             if form.is_valid():
                 program = Program()
@@ -123,7 +123,7 @@ def pages(request):
                 program.description = form['description'].data
                 program.save()
 
-                return HttpResponseRedirect('projects.html')
+                return HttpResponseRedirect('programs.html')
             else:
                 form = ProgramForm()
                 context['form'] = form
@@ -152,7 +152,7 @@ def Payment_Detail(request, id):
         form = PaymentForm(request.POST, instance=payment)
         if form.is_valid():
             form.save()
-            return redirect('payments.html')
+            return HttpResponseRedirect('../payments.html')
     else:
         payform = PaymentForm(instance=payment)
 
@@ -171,7 +171,7 @@ def Sponsor_Detail(request, id):
         form = DonorForm(request.POST, instance=sponsor)
         if form.is_valid():
             form.save()
-            return redirect('sponsors.html')
+            return HttpResponseRedirect('../sponsors.html')
     else:
         sponsorform = DonorForm(instance=sponsor) 
 
@@ -190,7 +190,7 @@ def Student_Detail(request, id):
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            return redirect('students.html')
+            return HttpResponseRedirect('../students.html')
     else:
         studentform = StudentForm(instance=student) 
 
@@ -204,7 +204,29 @@ def Student_Detail(request, id):
 def Program_Detail(request, id):
     program = Program.objects.get(id=id)
     template = loader.get_template('home/program.html')
+
+    if request.method == 'POST':
+        form = ProgramForm(request.POST, instance=program)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('../programs.html')
+    else:
+        form = ProgramForm(instance=program) 
+
     context = {
         'program':program,
+        'form':form,
     }
     return HttpResponse(template.render(context, request))
+
+@login_required
+def Delete_Data(request):
+    
+    Payment.objects.all().delete()
+    Program.objects.all().delete()
+    Donor.objects.all().delete()
+    Student.objects.all().delete()
+    Church.objects.all().delete()
+
+    
+    return HttpResponseRedirect('../')
