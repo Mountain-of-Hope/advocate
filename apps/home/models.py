@@ -52,6 +52,9 @@ class Student(models.Model):
     def __str__(self):
         return self.name
     
+    def GetSponsorName(self):
+        return self.sponsor.name
+    
 class Payment(models.Model):
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE, null=True, blank=True)
     method = models.CharField(default="check", max_length=255)

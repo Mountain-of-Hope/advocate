@@ -61,7 +61,9 @@
                                                         <tr>
                                                             <th scope="row">{{i.id}}</th>
                                                             <td><a href="student/{{i.id}}">{{i.name}}</a></td>
-                                                            <td>{{i.sponsor}}</td>
+                                                            {% for s in i.sponsor.all %}
+                                                                <td>{{s}}</td>
+                                                            {% endfor %}
                                                             <td>{{i.program}}</td>
                                                             <td>{{i.community}}</td>
                                                             <td>{{i.grade}}</td>
