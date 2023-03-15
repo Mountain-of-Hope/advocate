@@ -12,6 +12,7 @@ from django.urls import reverse
 from .models import Payment, Student, Church, Donor, Program
 from django.shortcuts import render, redirect
 from datetime import datetime
+import csv, io
 
 
 @login_required(login_url="/login/")
@@ -265,3 +266,45 @@ def Delete_Data(request):
 
     
     return HttpResponseRedirect('../')
+
+#test upload
+@login_required
+def Upload(request):
+    if request.method=='POST':
+        upload = request.FILES['doc']
+        file = upload.read().decode('utf-8')
+
+        reader = csv.DictReader(io.StringIO(file))
+
+        data = [line for line in reader]
+
+        for d in data:
+            print(d)
+
+        print(data)
+
+        return HttpResponseRedirect('../')
+    
+@login_required
+def Upload_Sponsors(request):
+    if request.method=='POST':
+        upload = request.FILES['doc']
+        file = upload.read().decode('utf-8')
+
+        reader = csv.DictReader(io.StringIO(file))
+
+        data = [line for line in reader]
+
+        for d in data:
+            created = Donor(
+                name = d['sponsor_Name'],
+                email = d['sponsor_email'],
+                phone = d['phone'],
+                address = d['address']
+                )
+            created.save()   
+
+        print(data)
+
+        return HttpResponseRedirect('../')
+    
