@@ -49,7 +49,8 @@ def pages(request):
     students = Student.objects.all()
     donors = Donor.objects.all()
     projects = Program.objects.all()
-    context = {'students':students, 'payments':pays, 'donors':donors, 'projects':projects}
+    churches = Church.objects.all()
+    context = {'students':students, 'payments':pays, 'donors':donors, 'projects':projects, 'churches':churches}
     
 
     # All resource paths end in .html.
@@ -126,6 +127,21 @@ def pages(request):
                 return HttpResponseRedirect('programs.html')
             else:
                 form = ProgramForm()
+                context['form'] = form
+
+        if load_template == 'groups.html':
+            form = ChurchForm(request.POST)
+            if form.is_valid():
+                church = Church()
+                church.name = form['name'].data
+                church.address = form['address'].data
+                church.email = form['email'].data
+                church.phone = form['phone'].data
+                church.save()
+
+                return HttpResponseRedirect('groups.html')
+            else:
+                form = ChurchForm()
                 context['form'] = form
 
         
@@ -215,6 +231,25 @@ def Program_Detail(request, id):
 
     context = {
         'program':program,
+        'form':form,
+    }
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def Group_Detail(request, id):
+    group = Church.objects.get(id=id)
+    template = loader.get_template('home/group.html')
+
+    if request.method == 'POST':
+        form = ChurchForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('../groups.html')
+    else:
+        form = ChurchForm(instance=group) 
+
+    context = {
+        'group':group,
         'form':form,
     }
     return HttpResponse(template.render(context, request))

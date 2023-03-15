@@ -15,6 +15,7 @@ urlpatterns = [
     path('sponsor/<int:id>', views.Sponsor_Detail, name='sponsor_details'),
     path('student/<int:id>', views.Student_Detail, name='student_details'),
     path('program/<int:id>', views.Program_Detail, name='program_details'),
+    path('group/<int:id>', views.Group_Detail, name='group_details'),
 
     # REMOVE IN PRODUCTION, FOR TESTING ONLY
     path('sdfkj2944ss/delete.html', views.Delete_Data, name='delete_data'),

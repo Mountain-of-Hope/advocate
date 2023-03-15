@@ -24,7 +24,7 @@ class Program(models.Model):
 class Church (models.Model):
     name = models.CharField(max_length=255)
     address = AddressField()
-    email = models.EmailField()
+    email = models.EmailField(null=True)
     phone = PhoneNumberField(blank=True)
 
     def __str__(self):
