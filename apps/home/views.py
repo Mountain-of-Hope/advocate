@@ -302,9 +302,31 @@ def Upload_Sponsors(request):
                 phone = d['phone'],
                 address = d['address']
                 )
+            created.save() 
+
+        return HttpResponseRedirect('../sponsors.html')
+
+@login_required
+def Upload_Students(request):
+    if request.method=='POST':
+        upload = request.FILES['doc']
+        file = upload.read().decode('utf-8')
+
+        reader = csv.DictReader(io.StringIO(file))
+
+        data = [line for line in reader]
+
+        for d in data:
+            created = Student(
+                name = d['name'],
+                program = Program.objects.get(name=d['program']),
+                community = d['community'],
+                grade = d['grade'],
+                enroll_date = datetime.now()
+                )
             created.save()   
 
         print(data)
 
-        return HttpResponseRedirect('../')
+        return HttpResponseRedirect('../students.html')
     

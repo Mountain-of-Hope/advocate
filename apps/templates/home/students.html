@@ -26,9 +26,7 @@
                                         <li class="breadcrumb-item"><a href="#!">Students</a></li>
                                         <li class="breadcrumb-item"><a href="javascript:">All Students</a></li>
                                     </ul>
-                                    <a href="/add-student.html" class="">
-                                        <button type="button" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="Import Students from Excel" aria-describedby="Import Students from Excel">Import</button>
-                                    </a>
+                                    <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import students from CSV" data-target="#importStudents" aria-describedby="Import students from CSV">Import</button>
                                     <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a student" data-target="#studentModal" aria-describedby="Import Payments from Excel">Add Student</button>
                                 </div>
                             </div>
@@ -47,7 +45,7 @@
                                                 <table class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>ID#</th>
                                                             <th>Name</th>
                                                             <th>Sponsor</th>
                                                             <th>Program</th>
@@ -63,6 +61,8 @@
                                                             <td><a href="student/{{i.id}}">{{i.name}}</a></td>
                                                             {% for s in i.sponsor.all %}
                                                                 <td>{{s}}</td>
+                                                            {% empty %}
+                                                                <td>-</td>
                                                             {% endfor %}
                                                             <td>{{i.program}}</td>
                                                             <td>{{i.community}}</td>
@@ -136,6 +136,34 @@
                         <div class="modal-footer">
                           {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                           <button type="submit" class="btn btn-primary">Save</button> {% endcomment %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal fade" id="importStudents" tabindex="-1" role="dialog" aria-labelledby="importStudents" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="importStudents">Import Student Records</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form action="students/upload" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                              <label for="payment-import-file-name" class="col-form-label">Choose a file:</label>
+                              <input type="file" name="doc" class="form-control" id="payment-import-file">
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Begin Import</button>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
                         </div>
                       </div>
                     </div>

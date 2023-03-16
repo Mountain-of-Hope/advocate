@@ -18,6 +18,7 @@ urlpatterns = [
     path('group/<int:id>', views.Group_Detail, name='group_details'),
     path('setup/upload', views.Upload, name='upload'),
     path('sponsors/upload', views.Upload_Sponsors, name='upload_sponsors'),
+    path('students/upload', views.Upload_Students, name='upload_students'),
 
     # REMOVE IN PRODUCTION, FOR TESTING ONLY
     path('sdfkj2944ss/delete.html', views.Delete_Data, name='delete_data'),
