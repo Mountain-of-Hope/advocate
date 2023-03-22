@@ -5,15 +5,15 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import template
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
+from django.core.paginator import Paginator
 from .forms import PaymentForm, ChurchForm, DonorForm, StudentForm, ProgramForm
 from django.urls import reverse
-from .models import Payment, Student, Church, Donor, Program
+from .models import Payment, Student, Church, Donor, Program, AddressField
 from django.shortcuts import render, redirect
 from datetime import datetime
 import csv, io
-
 
 @login_required(login_url="/login/")
 def index(request):
@@ -42,6 +42,20 @@ def index(request):
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
 
+def Sponsor_Add(request):
+
+        if request.method == 'POST':
+            form = DonorForm(request.POST)
+            if form.is_valid():
+                donor = form.save(commit=False)
+                donor.save()
+            else:
+                form = DonorForm()
+            return HttpResponseRedirect('../sponsors.html')
+        
+
+                
+
 
 # needs to be refactored to use dedicated functions for each view
 @login_required(login_url="/login/")
@@ -49,9 +63,16 @@ def pages(request):
     pays = Payment.objects.all()
     students = Student.objects.all()
     donors = Donor.objects.all()
+
+
     projects = Program.objects.all()
     churches = Church.objects.all()
-    context = {'students':students, 'payments':pays, 'donors':donors, 'projects':projects, 'churches':churches}
+    context = {'students':students,
+               'payments':pays,
+               'donors':donors,
+               'projects':projects,
+               'churches':churches
+               }
     
 
     # All resource paths end in .html.
@@ -85,6 +106,7 @@ def pages(request):
             
         if load_template == 'students.html':
             form = StudentForm(request.POST)
+            print(form.errors)
             if form.is_valid():
                 student = form.save(commit=False)
                 student.enroll_date = datetime.now()
@@ -100,20 +122,20 @@ def pages(request):
                 form = StudentForm()
                 context['form'] = form
 
+
+        
         if load_template == 'sponsors.html':
             form = DonorForm(request.POST)
             if form.is_valid():
-                donor = Donor()
-                donor.name = form['name'].data
-                donor.address = form['address'].data
-                donor.email = form['email'].data
-                donor.phone = form['phone'].data
+                donor = form.save(commit=False)
                 donor.save()
         
                 return HttpResponseRedirect('sponsors.html')
             else:
                 form = DonorForm()
                 context['form'] = form
+
+        
 
 
         if load_template == 'programs.html':
@@ -133,11 +155,7 @@ def pages(request):
         if load_template == 'groups.html':
             form = ChurchForm(request.POST)
             if form.is_valid():
-                church = Church()
-                church.name = form['name'].data
-                church.address = form['address'].data
-                church.email = form['email'].data
-                church.phone = form['phone'].data
+                church = form.save(commit=False)
                 church.save()
 
                 return HttpResponseRedirect('groups.html')
@@ -160,7 +178,7 @@ def pages(request):
         #html_template = loader.get_template('home/page-500.html')
         #return HttpResponse(html_template.render(context, request))
 
-@login_required
+@login_required(login_url="/login/")
 def Payment_Detail(request, id):
     payment = Payment.objects.get(id=id)
     template = loader.get_template('home/payment.html')
@@ -179,18 +197,52 @@ def Payment_Detail(request, id):
     }
     return HttpResponse(template.render(context, request))
 
-@login_required
+@login_required(login_url="/login/")
+def Group_Detail(request, id):
+    group = Church.objects.get(id=id)
+    template = loader.get_template('home/group.html')
+
+    if request.method == 'POST':
+        form = ChurchForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('../groups.html')
+    else:
+        initial_data = {
+            'name':group.name,
+            'address':group.address.raw,
+            'email':group.email,
+            'phone':group.phone
+        }
+        form = ChurchForm(instance=group, initial=initial_data)
+
+    context = {
+        'group':group,
+        'form':form,
+    }
+    return HttpResponse(template.render(context, request))
+
+@login_required(login_url="/login/")
 def Sponsor_Detail(request, id):
     sponsor = Donor.objects.get(id=id)
     template = loader.get_template('home/sponsor.html')
 
+
+    # TODO: fix address updating... currently, it just creates an entirely new record in address table
     if request.method == 'POST':
         form = DonorForm(request.POST, instance=sponsor)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('../sponsors.html')
     else:
-        sponsorform = DonorForm(instance=sponsor) 
+        initial_data = {
+            'name':sponsor.name,
+            'address':sponsor.address.raw,
+            'email':sponsor.email,
+            'phone':sponsor.phone,
+            'church':sponsor.church
+        }
+        sponsorform = DonorForm(instance=sponsor, initial=initial_data) 
 
     context = {
         'sponsor':sponsor,
@@ -198,7 +250,7 @@ def Sponsor_Detail(request, id):
     }
     return HttpResponse(template.render(context, request))
 
-@login_required
+@login_required(login_url="/login/")
 def Student_Detail(request, id):
     student = Student.objects.get(id=id)
     template = loader.get_template('home/student.html')
@@ -209,15 +261,15 @@ def Student_Detail(request, id):
             form.save()
             return HttpResponseRedirect('../students.html')
     else:
-        studentform = StudentForm(instance=student) 
+        form = StudentForm(instance=student) 
 
     context = {
         'student':student,
-        'form': studentform,
+        'form': form,
     }
     return HttpResponse(template.render(context, request))
 
-@login_required
+@login_required(login_url="/login/")
 def Program_Detail(request, id):
     program = Program.objects.get(id=id)
     template = loader.get_template('home/program.html')
@@ -236,26 +288,8 @@ def Program_Detail(request, id):
     }
     return HttpResponse(template.render(context, request))
 
-@login_required
-def Group_Detail(request, id):
-    group = Church.objects.get(id=id)
-    template = loader.get_template('home/group.html')
 
-    if request.method == 'POST':
-        form = ChurchForm(request.POST, instance=group)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('../groups.html')
-    else:
-        form = ChurchForm(instance=group) 
-
-    context = {
-        'group':group,
-        'form':form,
-    }
-    return HttpResponse(template.render(context, request))
-
-@login_required
+@login_required(login_url="/login/")
 def Delete_Data(request):
     
     Payment.objects.all().delete()
@@ -268,7 +302,7 @@ def Delete_Data(request):
     return HttpResponseRedirect('../')
 
 #test upload
-@login_required
+@login_required(login_url="/login/")
 def Upload(request):
     if request.method=='POST':
         upload = request.FILES['doc']
@@ -285,7 +319,7 @@ def Upload(request):
 
         return HttpResponseRedirect('../')
     
-@login_required
+@login_required(login_url="/login/")
 def Upload_Sponsors(request):
     if request.method=='POST':
         upload = request.FILES['doc']
@@ -306,7 +340,7 @@ def Upload_Sponsors(request):
 
         return HttpResponseRedirect('../sponsors.html')
 
-@login_required
+@login_required(login_url="/login/")
 def Upload_Students(request):
     if request.method=='POST':
         upload = request.FILES['doc']
@@ -329,4 +363,30 @@ def Upload_Students(request):
         print(data)
 
         return HttpResponseRedirect('../students.html')
+
+def display_latestnews(request):
     
+    newsdata = Donor.objects.all()
+    # articles per page
+    per_page = 4
+    # Paginator in a view function to paginate a queryset
+    # show 4 news per page
+    obj_paginator = Paginator(newsdata, per_page)
+    # list of objects on first page
+    first_page = obj_paginator.page(1).object_list
+    # range iterator of page numbers
+    page_range = obj_paginator.page_range
+
+    context = {
+    'obj_paginator':obj_paginator,
+    'first_page':first_page,
+    'page_range':page_range
+    }
+    #
+    if request.method == 'POST':
+        #getting page number
+        page_no = request.POST.get('page_no', None) 
+        results = list(obj_paginator.page(page_no).object_list.values('id', 'title','content'))
+        return JsonResponse({"results":results})
+
+    return render(request, 'home/test.html',context)

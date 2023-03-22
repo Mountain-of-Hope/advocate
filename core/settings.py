@@ -157,6 +157,8 @@ STATICFILES_DIRS = (
 GOOGLE_API_KEY = 'AIzaSyD6dmjF-mW6emdu0JSYwXak8f5q8d7HHnM'
 
 #############################################################
+PHONENUMBER_FORMAT_REGION = 'US'
+
 # OAuth settings 
 
 GITHUB_ID     = os.getenv('GITHUB_ID', None)

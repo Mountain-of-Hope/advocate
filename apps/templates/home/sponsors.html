@@ -56,40 +56,54 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {% for i in donors %}
-                                                        <tr>
-                                                            <th scope="row">{{i.id}}</th>
-                                                            <td><a href="sponsor/{{i.id}}">{{i.name}}</a></td>
-
-                                                            {% if i.email == '' %}
-                                                                <td>-</td>
-                                                            {% else %}
-                                                                <td>{{i.email}}</td>
-                                                            {% endif %}
-                                                            
-                                                            {% if i.phone == '' %}
-                                                                <td>-</td>
-                                                            {% else %}
-                                                                <td>{{i.phone}}</td>
-                                                            {% endif %}
-
-                                                            {% if i.address == '' %}
-                                                                <td>-</td>
-                                                            {% else %}
-                                                                <td>{{i.address}}</td>
-                                                            {% endif %}
-
-
-                                                            {% for s in i.student_set.all %}
-                                                                <td>{{s.name}}</td>
-                                                            {% empty %}
-                                                                <td>-</td>
-                                                            {% endfor%} 
-
-                                                        </tr>
-                                                        {% endfor %}
+                                                        <div class="pagination">
+		
+                                                            <div id="donors">
+                                                                {% for i in donors %}
+                                                                <tr>
+                                                                    <th scope="row">{{i.id}}</th>
+                                                                    <td><a href="sponsor/{{i.id}}">{{i.name}}</a></td>
+        
+                                                                    {% if i.email == '' %}
+                                                                        <td>-</td>
+                                                                    {% else %}
+                                                                        <td>{{i.email}}</td>
+                                                                    {% endif %}
+                                                                    
+                                                                    {% if i.phone == '' %}
+                                                                        <td>-</td>
+                                                                    {% else %}
+                                                                        <td>{{i.phone}}</td>
+                                                                    {% endif %}
+        
+                                                                    {% if i.address == '' %}
+                                                                        <td>-</td>
+                                                                    {% else %}
+                                                                        <td>{{i.address}}</td>
+                                                                    {% endif %}
+        
+        
+                                                                    {% for s in i.student_set.all %}
+                                                                        <td>{{s.name}}</td>
+                                                                    {% empty %}
+                                                                        <td>-</td>
+                                                                    {% endfor%} 
+                                                                </tr>
+                                                                {% endfor %}	
+                                                            </div>
+                                                        </div>
                                                     </tbody>
                                                 </table>
+{% comment %}                                                 <div class="card-body">
+                                                    <nav>
+                                                        <ul class="pagination">
+    
+                                                            {% for i in don_pageRange %}
+                                                            <li class="page-item"><a class="page-link" href="{{i}}">{{i}}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </nav>
+                                                </div> {% endcomment %}
                                             </div>
                                         </div>
                                     </div>
@@ -99,6 +113,35 @@
                             <!-- [ Main Content ] end -->
                         </div>
                     </div>
+{% comment %} 
+                    <script>
+                        $('a').click(function(event){
+                            // preventing default actions
+                            event.preventDefault();
+                            var page_no = $(this).attr('href');
+                            // ajax call
+                                $.ajax({
+                                        type: "POST",
+                                        // define url name
+                                        url: "{% url 'sponsorsTST' %}", 
+                                        data : {    
+                                        page_no : page_no, 
+                                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                                    },
+                                    // handle a successful response
+                                    success: function (response) {
+                                        $('#donors').html('')
+                                        $.each(response.results, function(i, val) {
+                                         //append to post
+                                        $('#donors').append('<h2>' + val.title + '</h2><p>'+ val.content +'</p>')
+                                       });
+                                    },
+                                    error: function () {
+                                        alert('Error Occured');
+                                    }
+                                }); 
+                        });    
+                        </script> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -114,12 +157,12 @@
                           </button>
                         </div>
                         <div class="modal-body">
-                            <form action="" method="POST">
+                            <form action="sponsors/add" method="POST">
                                 {% csrf_token %}
                                 <table>
                                     {{form.as_table}}
                                 </table>
-                                <input type="submit" value="Submit">
+                                <input type="submit" value="Submit" class="btn btn-primary">
                             </form>
                           {% comment %} <form role="form" method="post" action="">
                             {% csrf_token %}

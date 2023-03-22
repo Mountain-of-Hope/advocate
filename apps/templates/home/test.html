@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pagination in Django</title>
+		<style>
+		
+		.pagination { display: inline-block;}
+		.pagination a { color: black; float: left; padding: 8px 16px; text-decoration: none;}
+		.pagination a.active { background-color: #4CAF50; color: white;}
+		.pagination a:hover:not(.active) {background-color: #ddd;}
+		</style>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+	<div class="container">
+		
+		<div id="articles">
+			{% for i in first_page %}
+			<h2>{{i.name}}</h2>
+			{% endfor %}	
+		</div>
+		
+		<div class="pagination">
+		{% for i in page_range %}
+		<a style="margin-left: 5px; " href="{{i}}">{{i}}</a>
+		{% endfor %}
+		</div>
+	</div>
+	<script>
+	$('a').click(function(event){
+		// preventing default actions
+		event.preventDefault();
+		var page_no = $(this).attr('href');
+		// ajax call
+			$.ajax({
+					type: "POST",
+					// define url name
+					url: "{% url 'display_pagination' %}", 
+					data : {    
+					page_no : page_no, 
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+				},
+				// handle a successful response
+				success: function (response) {
+					$('#articles').html('')
+					$.each(response.results, function(i, val) {
+					 //append to post
+					$('#articles').append('<h2>' + val.title + '</h2><p>'+ val.content +'</p>')
+				   });
+				},
+				error: function () {
+					alert('Error Occured');
+				}
+			}); 
+	});    
+	</script>
+</body>
+</html>

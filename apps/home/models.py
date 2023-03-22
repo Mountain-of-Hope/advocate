@@ -13,10 +13,18 @@ PROGRAM_CHOICES = (
     ("program", "Program"),
 )
 
+# Program choices
+PAYMENT_CHOICES = (
+    ("Check", "Check"),
+    ("Online", "Online"),
+)
+
 class Program(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=20, choices=PROGRAM_CHOICES, default='program')
     description = models.CharField(max_length=255, blank=True)
+
+    # Consider adding a cost here, might make program management easier.
 
     def __str__(self):
         return self.name
@@ -32,7 +40,7 @@ class Church (models.Model):
 
 class Donor (models.Model):
     name = models.CharField(max_length=255)
-    address = AddressField()
+    address = AddressField(on_delete=models.CASCADE)
     email = models.EmailField(null=True)
     phone = PhoneNumberField(blank=True)
     church = models.ForeignKey(Church, on_delete=models.CASCADE, null=True, blank=True)
@@ -57,7 +65,7 @@ class Student(models.Model):
     
 class Payment(models.Model):
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE, null=True, blank=True)
-    method = models.CharField(default="check", max_length=255)
+    method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='Check')
     checkNumber = models.IntegerField(default=0)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     date = models.CharField(default="", max_length=255)
