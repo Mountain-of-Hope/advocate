@@ -23,8 +23,7 @@ class Program(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=20, choices=PROGRAM_CHOICES, default='program')
     description = models.CharField(max_length=255, blank=True)
-
-    # Consider adding a cost here, might make program management easier.
+    cost = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
 
     def __str__(self):
         return self.name
@@ -64,9 +63,9 @@ class Student(models.Model):
         return self.sponsor.name
     
 class Payment(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True) 
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE, null=True, blank=True)
     method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='Check')
     checkNumber = models.IntegerField(default=0)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     date = models.CharField(default="", max_length=255)
-    purpose = models.CharField(max_length=255)

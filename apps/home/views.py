@@ -84,6 +84,17 @@ def pages(request):
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
         
+        if load_template == 'overfunded.html':
+            # Formula for overfunded:
+            # pull all student objects 
+            # add up how much they should have in the 'account'
+            # if greater than 'account' value, add to list 
+            # return all overfunded students
+            students = Student.objects.all()
+
+
+
+        
         # hacked, needs to be refactored, extract to individual methods
         if load_template == 'payments.html':
             if request.method == 'POST':
@@ -94,7 +105,7 @@ def pages(request):
                     pay.amount = form['amount'].data
                     pay.checkNumber = form['checkNumber'].data
                     pay.date = form['date'].data
-                    pay.purpose = form['purpose'].data
+                    pay.student = Student.objects.get(pk=form['student'].data)
                     pay.method = form['method'].data
                     pay.save()
                     
@@ -106,7 +117,6 @@ def pages(request):
             
         if load_template == 'students.html':
             form = StudentForm(request.POST)
-            print(form.errors)
             if form.is_valid():
                 student = form.save(commit=False)
                 student.enroll_date = datetime.now()
@@ -134,9 +144,6 @@ def pages(request):
             else:
                 form = DonorForm()
                 context['form'] = form
-
-        
-
 
         if load_template == 'programs.html':
             form = ProgramForm(request.POST)

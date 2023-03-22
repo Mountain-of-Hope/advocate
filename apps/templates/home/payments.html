@@ -54,11 +54,11 @@
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>Name</th>
+                                                            <th>Donor</th>
+                                                            <th>Student</th>
                                                             <th>Method</th>
                                                             <th>Amount</th>
                                                             <th>Date</th>
-                                                            <th>Purpose</th>
                                                             <th class="text-right"></th>
                                                         </tr>
                                                     </thead>
@@ -67,10 +67,10 @@
                                                         <tr>
                                                             <th scope="row">{{i.id}}</th>
                                                             <td>{{i.donor}}</td>
+                                                            <td>{{i.student}}</td>
                                                             <td>{{i.method}}</td>
                                                             <td>{{i.amount}}</td>
                                                             <td>{{i.date}}</td>
-                                                            <td>{{i.purpose}}</td>
                                                             <td> 
                                                                 <a href="payment/{{i.id}}">
                                                                     <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit" data-toggle="modal" data-target="#emailModal"></button>

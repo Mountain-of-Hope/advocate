@@ -42,10 +42,6 @@ class DonorForm(ModelForm):
         self.fields['email'].required = False
         self.fields['phone'].required = False
 
-
-    
-
-
 class StudentForm(ModelForm):
     class Meta:
         model = Student
@@ -128,11 +124,13 @@ class PaymentForm(ModelForm):
             'class': 'form-control',
             'placeholder':'Payment Date'
            }),
-           'purpose': TextInput(attrs={
+           'student': Select(attrs={
             'class': 'form-control',
             'placeholder':'What was this payment for?'
            })
         }
+
+
 
 class ProgramForm(ModelForm):
     class Meta:
@@ -150,5 +148,9 @@ class ProgramForm(ModelForm):
            'description': Textarea(attrs={
             'class': 'form-control',
             'placeholder':'Short description of the project/program for other workers to know about'
+           }),
+           'cost': NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder':'Program cost per month'
            })
         }

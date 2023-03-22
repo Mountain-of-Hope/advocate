@@ -47,6 +47,7 @@
                                                             <th>#</th>
                                                             <th>Name</th>
                                                             <th>Type</th>
+                                                            <th>Cost</th>
                                                             <th>Description</th>
                                                         </tr>
                                                     </thead>
@@ -56,6 +57,7 @@
                                                             <th scope="row">{{i.id}}</th>
                                                             <td><a href="program/{{i.id}}">{{i.name}}</a></td>
                                                             <td>{{i.type}}</td>
+                                                            <td>${{i.cost}}</td>
 
                                                             {% if i.description == '' %}
                                                                 <td>-</td>
