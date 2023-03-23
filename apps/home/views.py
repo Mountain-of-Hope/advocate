@@ -14,6 +14,7 @@ from .models import Payment, Student, Church, Donor, Program, AddressField
 from django.shortcuts import render, redirect
 from datetime import datetime
 import csv, io
+from decimal import *
 
 @login_required(login_url="/login/")
 def index(request):
@@ -85,12 +86,55 @@ def pages(request):
             return HttpResponseRedirect(reverse('admin:index'))
         
         if load_template == 'overfunded.html':
-            # Formula for overfunded:
-            # pull all student objects 
-            # add up how much they should have in the 'account'
-            # if greater than 'account' value, add to list 
-            # return all overfunded students
-            students = Student.objects.all()
+            overfunded_students = []
+            for student in students:
+                
+                # How much should they have?
+                program_cost = Program.objects.get(name=student.program).cost
+                funded_thru = datetime.now().date()
+                months_to_be_funded = diff_month(funded_thru, student.enroll_date)
+                expected_amount = program_cost * months_to_be_funded
+
+                
+                # How much do they actually have?
+                total = Decimal()
+                this_students_donations = Payment.objects.filter(student=student)
+                
+                for p in this_students_donations:
+                    total += p.amount
+
+                if total > expected_amount:
+                    overfunded_students.append(student)
+                    student.overfunded_amount = total-expected_amount
+
+            context['overfunded'] = overfunded_students
+
+
+        if load_template == 'underfunded.html':
+            underfunded_students = []
+            for student in students:
+                
+                # How much should they have?
+                program_cost = Program.objects.get(name=student.program).cost
+                funded_thru = datetime.now().date()
+                months_to_be_funded = diff_month(funded_thru, student.enroll_date)
+                expected_amount = program_cost * months_to_be_funded
+
+                
+                # How much do they actually have?
+                total = Decimal()
+                this_students_donations = Payment.objects.filter(student=student)
+                
+                for p in this_students_donations:
+                    total += p.amount
+
+                if total < expected_amount:
+                    underfunded_students.append(student)
+                    student.deficit_amount = total-expected_amount
+
+            context['underfunded'] = underfunded_students
+
+                    
 
 
 
@@ -119,6 +163,8 @@ def pages(request):
             form = StudentForm(request.POST)
             if form.is_valid():
                 student = form.save(commit=False)
+                #testEnroll = '2021/10/20'
+                #student.enroll_date = datetime.strptime(testEnroll, "%Y/%m/%d")
                 student.enroll_date = datetime.now()
                 student.save()
                 newSponsor = form.cleaned_data['sponsor'].first()
@@ -370,6 +416,10 @@ def Upload_Students(request):
         print(data)
 
         return HttpResponseRedirect('../students.html')
+
+#from top solution here: https://stackoverflow.com/questions/4039879/best-way-to-find-the-months-between-two-dates
+def diff_month(d1, d2):
+    return (d1.year - d2.year) * 12 + d1.month - d2.month
 
 def display_latestnews(request):
     

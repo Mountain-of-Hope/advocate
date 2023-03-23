@@ -52,11 +52,22 @@
                                                             <th>#</th>
                                                             <th>Student Name</th>
                                                             <th>Sponsor</th>
-                                                            <th>Amount</th>
-                                                            <th>Purpose/Notes</th>
+                                                            <th>Amount Overage</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        {% for i in overfunded %}
+                                                        <tr>
+                                                            <th scope="row">{{i.id}}</th>
+                                                            <td><a href="student/{{i.id}}">{{i.name}}</a></td>
+                                                            {% for s in i.sponsor.all %}
+                                                                <td>{{s}}</td>
+                                                            {% empty %}
+                                                                <td>-</td>
+                                                            {% endfor %}
+                                                            <td>{{i.overfunded_amount}}</td>
+                                                        </tr>
+                                                        {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>

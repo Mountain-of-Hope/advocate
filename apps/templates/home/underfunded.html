@@ -52,28 +52,22 @@
                                                             <th>#</th>
                                                             <th>Student Name</th>
                                                             <th>Sponsor</th>
-                                                            <th>Amount Behind</th>
+                                                            <th>Deficit Amount</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        {% for i in underfunded %}
                                                         <tr>
-                                                            <th scope="row">1</th>
-                                                            <td>Zane Goodwin</td>
-                                                            <td>Benedict Mejia</td>
-                                                            <td class="text-danger">-$100</td>
+                                                            <th scope="row">{{i.id}}</th>
+                                                            <td><a href="student/{{i.id}}">{{i.name}}</a></td>
+                                                            {% for s in i.sponsor.all %}
+                                                                <td>{{s}}</td>
+                                                            {% empty %}
+                                                                <td>-</td>
+                                                            {% endfor %}
+                                                            <td>{{i.deficit_amount}}</td>
                                                         </tr>
-                                                        <tr>
-                                                            <th scope="row">2</th>
-                                                            <td>Guet-chimayda Metesier</td>
-                                                            <td>Kane Briggs</td>
-                                                            <td class="text-danger">-$45</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">3</th>
-                                                            <td>Gais Accilas</td>
-                                                            <td>Evan Summers</td>
-                                                            <td class="text-warning">-$10</td>
-                                                        </tr>
+                                                        {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>
