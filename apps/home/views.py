@@ -227,9 +227,9 @@ def pages(request):
         html_template = loader.get_template('home/page-404.html')
         return HttpResponse(html_template.render(context, request))
 
-    #except:
-        #html_template = loader.get_template('home/page-500.html')
-        #return HttpResponse(html_template.render(context, request))
+    except:
+        html_template = loader.get_template('home/page-500.html')
+        return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
 def Payment_Detail(request, id):
@@ -416,6 +416,21 @@ def Upload_Students(request):
         print(data)
 
         return HttpResponseRedirect('../students.html')
+    
+
+def Sponsor_Delete(request, id):
+    sponsor = Donor.objects.get(pk=id)
+    sponsor.delete()
+    return HttpResponseRedirect("../../sponsors.html")
+
+def Student_Delete(request, id):
+    pass
+
+def Group_Delete(request, id):
+    pass
+
+def Program_Delete(request, id):
+    pass
 
 #from top solution here: https://stackoverflow.com/questions/4039879/best-way-to-find-the-months-between-two-dates
 def diff_month(d1, d2):
