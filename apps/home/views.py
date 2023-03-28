@@ -424,7 +424,9 @@ def Sponsor_Delete(request, id):
     return HttpResponseRedirect("../../sponsors.html")
 
 def Student_Delete(request, id):
-    pass
+    student = Student.objects.get(pk=id)
+    student.delete()
+    return HttpResponseRedirect("../../students.html")
 
 def Group_Delete(request, id):
     pass

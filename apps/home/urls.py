@@ -13,10 +13,10 @@ urlpatterns = [
     # Student Details
     path('payment/<int:id>', views.Payment_Detail, name='payment_details'),
     path('sponsor/<int:id>', views.Sponsor_Detail, name='sponsor_details'),
-    path('sponsor/delete/<int:id>', views.Sponsor_Delete, name='sponsor_delete'),
+    path('sponsor/<int:id>/delete', views.Sponsor_Delete, name='sponsor_delete'),
     path('sponsors/add', views.Sponsor_Add, name='sponsor_details'),
     path('student/<int:id>', views.Student_Detail, name='student_details'),
-    path('student/delete/<int:id>', views.Student_Delete, name='student_delete'),
+    path('student/<int:id>/delete', views.Student_Delete, name='student_delete'),
     path('program/<int:id>', views.Program_Detail, name='program_details'),
     path('program/delete/<int:id>', views.Program_Delete, name='program_delete'),
     path('group/<int:id>', views.Group_Detail, name='group_details'),
@@ -27,7 +27,7 @@ urlpatterns = [
 
 
     # REMOVE IN PRODUCTION, FOR TESTING ONLY
-    # path('sdfkj2944ss/delete.html', views.Delete_Data, name='delete_data'),
+    path('sdfkj2944ss/delete.html', views.Delete_Data, name='delete_data'),
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
