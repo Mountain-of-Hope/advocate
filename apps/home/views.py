@@ -429,10 +429,19 @@ def Student_Delete(request, id):
     return HttpResponseRedirect("../../students.html")
 
 def Group_Delete(request, id):
-    pass
+    group = Church.objects.get(pk=id)
+    group.delete()
+    return HttpResponseRedirect("../../groups.html")
 
 def Program_Delete(request, id):
-    pass
+    prog = Program.objects.get(pk=id)
+    prog.delete()
+    return HttpResponseRedirect("../../programs.html")
+
+def Payment_Delete(request, id):
+    payment = Payment.objects.get(pk=id)
+    payment.delete()
+    return HttpResponseRedirect("../../payments.html")
 
 #from top solution here: https://stackoverflow.com/questions/4039879/best-way-to-find-the-months-between-two-dates
 def diff_month(d1, d2):
