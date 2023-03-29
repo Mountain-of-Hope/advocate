@@ -25,6 +25,7 @@ urlpatterns = [
     path('setup/upload', views.Upload, name='upload'),
     path('sponsors/upload', views.Upload_Sponsors, name='upload_sponsors'),
     path('students/upload', views.Upload_Students, name='upload_students'),
+    #path('search', views.search_site, name='search-site'),
 
 
     # REMOVE IN PRODUCTION, FOR TESTING ONLY

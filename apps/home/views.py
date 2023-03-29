@@ -54,7 +54,16 @@ def Sponsor_Add(request):
                 form = DonorForm()
             return HttpResponseRedirect('../sponsors.html')
         
+@login_required(login_url="/login/")
+def search_site(request):
+    if request.method == 'POST':
+        searchText = request.POST['search-text']
 
+        return HttpResponseRedirect('../search.html',
+                                    {'results': searchText})
+    else:
+        return HttpResponseRedirect('../search.html',
+                                    {'results': searchText})
                 
 
 
@@ -85,6 +94,21 @@ def pages(request):
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
         
+        if load_template == 'search.html':
+            if request.method == 'POST':
+                searchText = request.POST['search-text']
+
+                results = Donor.objects.filter(name__contains=searchText)
+
+                context['results'] = results
+                context['searchTerm'] = searchText
+                
+            else:
+                searchText = request.POST['search-text']
+                context['searchTerm'] = searchText
+        
+
+
         if load_template == 'overfunded.html':
             overfunded_students = []
             for student in students:
@@ -133,10 +157,6 @@ def pages(request):
                     student.deficit_amount = total-expected_amount
 
             context['underfunded'] = underfunded_students
-
-                    
-
-
 
         
         # hacked, needs to be refactored, extract to individual methods
@@ -227,9 +247,9 @@ def pages(request):
         html_template = loader.get_template('home/page-404.html')
         return HttpResponse(html_template.render(context, request))
 
-    except:
+"""     except:
         html_template = loader.get_template('home/page-500.html')
-        return HttpResponse(html_template.render(context, request))
+        return HttpResponse(html_template.render(context, request)) """
 
 @login_required(login_url="/login/")
 def Payment_Detail(request, id):
