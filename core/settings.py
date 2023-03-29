@@ -154,7 +154,7 @@ STATICFILES_DIRS = (
 
 #############################################################
 # Google Maps API
-GOOGLE_API_KEY = 'AIzaSyD6dmjF-mW6emdu0JSYwXak8f5q8d7HHnM'
+GOOGLE_API_KEY = ''
 
 #############################################################
 PHONENUMBER_FORMAT_REGION = 'US'

@@ -1,9 +1,0 @@
-Potentially use
-
-https://github.com/arrobalytics/django-ledger
-
-MODALS AND TABLE EDITING
-http://trco.silkym.com/open-source/
-
-2/16 TODO CALEB
-- schedule meeting with partner org for next week
