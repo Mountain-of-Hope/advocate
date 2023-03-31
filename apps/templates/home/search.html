@@ -1,4 +1,5 @@
 {% extends "layouts/base.html" %}
+{% load util %}
 
 {% block title %} Search Results {% endblock %} 
 
@@ -50,7 +51,24 @@
                                                            {% for r in results %}
                                                            <tr>
                                                                <th scope="row">{{r.id}}</th>
-                                                               <td><a href="sponsor/{{r.id}}">{{r.name}}</a></td>
+
+                                                                {% if r|get_type == "Donor" %}
+                                                                <td><a href="../sponsor/{{r.id}}">{{r.name}}</a></td>
+                                                                
+                                                                {% elif r|get_type == "Student"%}
+                                                                <td><a href="../student/{{r.id}}">{{r.name}}</a></td>
+                                                                
+                                                                {% elif r|get_type == "Program"%}
+                                                                <td><a href="../program/{{r.id}}">{{r.name}}</a></td>
+                                                                
+                                                                {% elif r|get_type == "Church"%}
+                                                                <td><a href="../group/{{r.id}}">{{r.name}}</a></td>
+                                                                
+                                                                {% elif r|get_type == "Payment"%}
+                                                                <td><a href="../payment/{{r.id}}">{{r.name}}</a></td>
+                                                                {% endif %} 
+
+                                                                
                                                                
                                                            </tr>
                                                            {% endfor %}

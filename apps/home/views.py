@@ -15,6 +15,7 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 import csv, io
 from decimal import *
+from itertools import chain
 
 @login_required(login_url="/login/")
 def index(request):
@@ -53,18 +54,6 @@ def Sponsor_Add(request):
             else:
                 form = DonorForm()
             return HttpResponseRedirect('../sponsors.html')
-        
-@login_required(login_url="/login/")
-def search_site(request):
-    if request.method == 'POST':
-        searchText = request.POST['search-text']
-
-        return HttpResponseRedirect('../search.html',
-                                    {'results': searchText})
-    else:
-        return HttpResponseRedirect('../search.html',
-                                    {'results': searchText})
-                
 
 
 # needs to be refactored to use dedicated functions for each view
@@ -98,7 +87,12 @@ def pages(request):
             if request.method == 'POST':
                 searchText = request.POST['search-text']
 
-                results = Donor.objects.filter(name__contains=searchText)
+                resultsDonors = Donor.objects.filter(name__contains=searchText)
+                resultsStudents = Student.objects.filter(name__contains=searchText)
+                #resultsPayments = Donor.objects.filter(name__contains=searchText)
+                resultsPrograms = Program.objects.filter(name__contains=searchText)
+                resultsGroups = Church.objects.filter(name__contains=searchText)
+                results = chain(resultsDonors, resultsStudents, resultsPrograms, resultsGroups)
 
                 context['results'] = results
                 context['searchTerm'] = searchText

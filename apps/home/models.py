@@ -4,6 +4,7 @@ from django.db import models
 from address.models import AddressField
 from phonenumber_field.modelfields  import PhoneNumberField
 from django.contrib.auth.models import User
+from django import template
 
 # Create your models here.
 
@@ -46,7 +47,7 @@ class Donor (models.Model):
 
     def __str__(self):
         return self.name
-
+    
 class Student(models.Model):
     enroll_date = models.DateField(null=True)
     name = models.CharField(max_length=255)
