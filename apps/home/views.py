@@ -11,11 +11,19 @@ from django.core.paginator import Paginator
 from .forms import PaymentForm, ChurchForm, DonorForm, StudentForm, ProgramForm
 from django.urls import reverse
 from .models import Payment, Student, Church, Donor, Program, AddressField
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from datetime import datetime
 import csv, io
 from decimal import *
 from itertools import chain
+
+@login_required
+def posts_edit(request, id):
+    instance = get_object_or_404(Student, id=id)
+    context={
+        'instance': instance
+    }
+    return render(request, 'modal.html', context)
 
 @login_required(login_url="/login/")
 def index(request):

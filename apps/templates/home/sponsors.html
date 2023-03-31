@@ -48,6 +48,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>ID#</th>
+                                                            <th></th>
                                                             <th>Name</th>
                                                             <th>Email</th>
                                                             <th>Phone</th>
@@ -62,14 +63,17 @@
                                                                 {% for i in donors %}
                                                                 <tr>
                                                                     <th scope="row">{{i.id}}</th>
+                                                                    <td><button type="button" style="padding: 5px 5px 5px 4px;"class="btn btn-sqaure btn-outline-primary f-10 feather icon-mail" data-toggle="modal" data-target="#emailModal"></button></td>
+                                                                    <td><a class="btn btn-info" class="open-modal" data-url="{% url 'up' id=val.id %}">Edit</a></td>
                                                                     <td><a href="sponsor/{{i.id}}">{{i.name}}</a></td>
+                                                                
         
                                                                     {% if i.email == '' %}
                                                                         <td>-</td>
                                                                     {% else %}
                                                                         <td>{{i.email}}</td>
+                                                                        
                                                                     {% endif %}
-                                                                    
                                                                     {% if i.phone == '' %}
                                                                         <td>-</td>
                                                                     {% else %}
@@ -171,6 +175,8 @@
                     </div>
                   </div>
 
+
+
                   {% comment %} Import Modal {% endcomment %}
                   <div class="modal fade" id="importSponsors" tabindex="-1" role="dialog" aria-labelledby="importSponsors" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -199,10 +205,57 @@
                       </div>
                     </div>
                   </div>
+                  {% comment %} Email Modal {% endcomment %}
+                  <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="emailModalLabel">New message</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form>
+                            {% csrf_token %}
+                            <div class="form-group">
+                              <label for="recipient-name" class="col-form-label">Recipient:</label>
+                              <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                            <div class="form-group">
+                              <label for="message-text" class="col-form-label">Message:</label>
+                              <textarea class="form-control" id="message-text"></textarea>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Send message</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <!-- Here we create this empty div for inserting modal -->
+                <div id="modal-div"></div>
     </section>
     <!-- [ Main Content ] end -->
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script>
+                
+    var modalDiv = $("#modal-div");
+
+    $(".open-modal").on("click", function() {
+        $.ajax({
+        url: $(this).attr("data-url"),
+        success: function(data) {
+            modalDiv.html(data);
+            $("#myEdit").modal();
+        }
+        });
+    });
+</script>{% endblock javascripts %}
