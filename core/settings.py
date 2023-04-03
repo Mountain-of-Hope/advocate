@@ -91,20 +91,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
     DATABASES = { 
       'default': {
-        'ENGINE'  : 'django.db.backends.mysql', 
-        'NAME'    : os.getenv('DB_NAME'     , 'appseed_db'),
-        'USER'    : os.getenv('DB_USERNAME' , 'appseed_db_usr'),
-        'PASSWORD': os.getenv('DB_PASS'     , 'pass'),
-        'HOST'    : os.getenv('DB_HOST'     , 'localhost'),
-        'PORT'    : os.getenv('DB_PORT'     , 3306),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['RDS_DB_NAME'],
+        'USER': os.environ['RDS_USERNAME'],
+        'PASSWORD': os.environ['RDS_PASSWORD'],
+        'HOST': os.environ['RDS_HOSTNAME'],
+        'PORT': os.environ['RDS_PORT'],
         }, 
     }
 else:
     DATABASES = {
-"""         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
-        } """
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': os.environ['RDS_DB_NAME'],
@@ -112,7 +108,8 @@ else:
             'PASSWORD': os.environ['RDS_PASSWORD'],
             'HOST': os.environ['RDS_HOSTNAME'],
             'PORT': os.environ['RDS_PORT'],
-    }
+        } 
+        
     }
 
 # Password validation
