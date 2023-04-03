@@ -1,0 +1,28 @@
+<div class="modal fade" id="myEdit" role="dialog">
+    <div class="modal-dialog">
+      <form  class="well contact-form" method="post" action="{% url 'get-sponsor-email' %}">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Email Donor</h4>
+          </div>
+          <div class="modal-body">
+            <label for="usr">Donor:</label>
+            <input type="text" class="form-control" required="" name="uss" value="{{ instance.name }} ({{instance.email}})" id="uss">
+            
+            
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Message:</label>
+              <textarea class="form-control" id="message-text"></textarea>
+            </div>
+          </div>
+
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Send message</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

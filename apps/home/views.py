@@ -18,12 +18,13 @@ from decimal import *
 from itertools import chain
 
 @login_required
-def posts_edit(request, id):
-    instance = get_object_or_404(Student, id=id)
+def get_sponsor_email(request, id=None):
+    
+    instance = get_object_or_404(Donor, id=id)
     context={
         'instance': instance
     }
-    return render(request, 'modal.html', context)
+    return render(request, 'home/email-modal.html', context)
 
 @login_required(login_url="/login/")
 def index(request):

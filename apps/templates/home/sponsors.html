@@ -63,8 +63,8 @@
                                                                 {% for i in donors %}
                                                                 <tr>
                                                                     <th scope="row">{{i.id}}</th>
-                                                                    <td><button type="button" style="padding: 5px 5px 5px 4px;"class="btn btn-sqaure btn-outline-primary f-10 feather icon-mail" data-toggle="modal" data-target="#emailModal"></button></td>
-                                                                    <td><a class="btn btn-info" class="open-modal" data-url="{% url 'up' id=val.id %}">Edit</a></td>
+                                                                    {% comment %} <td><button type="button" style="padding: 5px 5px 5px 4px;"class="btn btn-sqaure btn-outline-primary f-10 feather icon-mail" data-toggle="modal" data-target="#emailModal"></button></td> {% endcomment %}
+                                                                    <td><a style="padding: 5px 5px 5px 4px;" class="btn btn-sqaure btn-outline-primary f-10 feather icon-mail open-modal-for-caleb-email" id="open-modal" data-url="{% url 'get-sponsor-email' id=i.id %}"></a></td>
                                                                     <td><a href="sponsor/{{i.id}}">{{i.name}}</a></td>
                                                                 
         
@@ -247,15 +247,15 @@
 {% block javascripts %}
 <script>
                 
-    var modalDiv = $("#modal-div");
+  var modalDiv = $("#modal-div");
 
-    $(".open-modal").on("click", function() {
-        $.ajax({
-        url: $(this).attr("data-url"),
-        success: function(data) {
-            modalDiv.html(data);
-            $("#myEdit").modal();
-        }
-        });
+  $(".open-modal-for-caleb-email").on("click", function() {
+    $.ajax({
+      url: $(this).attr("data-url"),
+      success: function(data) {
+        modalDiv.html(data);
+        $("#myEdit").modal();
+      }
     });
+  });
 </script>{% endblock javascripts %}
