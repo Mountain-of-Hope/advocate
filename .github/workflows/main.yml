@@ -1,6 +1,6 @@
 #Location: .github/workflows/main.yml
 
-name: CI-CD pipeline to AWS
+name: CI-CD pipeline to AWS Production
 env:
   EB_S3_BUCKET_NAME: "YOUR BUCKET NAME FROM Step 2"
   EB_APPLICATION_NAME: "YOUR APP NAME FROM Step 1"
