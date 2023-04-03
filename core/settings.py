@@ -26,7 +26,7 @@ DEBUG = env('DEBUG')
 ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets') 
 
 # load production server from .env
-ALLOWED_HOSTS        = ['18.206.148.137', '127.0.0.1']
+ALLOWED_HOSTS        = ['18.206.148.137', '127.0.0.1', 'Advocate-env.eba-pgjf3gc3.us-east-1.elasticbeanstalk.com']
 #CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
 
 # Application definition
@@ -101,10 +101,18 @@ if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
     }
 else:
     DATABASES = {
-        'default': {
+"""         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'db.sqlite3',
-        }
+        } """
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+    }
     }
 
 # Password validation
