@@ -28,7 +28,7 @@
                                     </ul>
                                     <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#importSponsors" aria-describedby="Import Payments from Excel">Import</button>
                                     
-                                    <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a manual payment" data-target="#sponsorModal" aria-describedby="Import Payments from Excel">Add Sponsor</button>
+                                    <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a sponsor" data-target="#sponsorModal" aria-describedby="Import Payments from Excel">Add Sponsor</button>
                                     
                                 </div>
                             </div>
@@ -64,8 +64,10 @@
                                                                 <tr>
                                                                     <th scope="row">{{i.id}}</th>
                                                                     {% comment %} <td><button type="button" style="padding: 5px 5px 5px 4px;"class="btn btn-sqaure btn-outline-primary f-10 feather icon-mail" data-toggle="modal" data-target="#emailModal"></button></td> {% endcomment %}
-                                                                    <td><a style="padding: 5px 5px 5px 4px;" class="btn btn-sqaure btn-outline-primary f-10 feather icon-mail open-modal-for-caleb-email" id="open-modal" data-url="{% url 'get-sponsor-email' id=i.id %}"></a></td>
-                                                                    <td><a href="sponsor/{{i.id}}">{{i.name}}</a></td>
+                                                                    
+                                                                    <td><a href="mailto: {{i.email}}" style="padding: 5px 5px 5px 4px;" class="btn btn-sqaure btn-outline-primary f-10 feather icon-mail"></a></td>
+                                                                    {% comment %} <td><a style="padding: 5px 5px 5px 4px;" class="btn btn-sqaure btn-outline-primary f-10 feather icon-mail open-modal-for-caleb-email" id="open-modal" data-url="{% url 'get-sponsor-email' id=i.id %}"></a></td> {% endcomment %}
+                                                                    <td><a href="sponsor/{{i.id}}" >{{i.name}}</a></td>
                                                                 
         
                                                                     {% if i.email == '' %}
@@ -174,9 +176,6 @@
                       </div>
                     </div>
                   </div>
-
-
-
                   {% comment %} Import Modal {% endcomment %}
                   <div class="modal fade" id="importSponsors" tabindex="-1" role="dialog" aria-labelledby="importSponsors" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -206,7 +205,7 @@
                     </div>
                   </div>
                   {% comment %} Email Modal {% endcomment %}
-                  <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
+{% comment %}                   <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -234,7 +233,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> {% endcomment %}
 
                 <!-- Here we create this empty div for inserting modal -->
                 <div id="modal-div"></div>

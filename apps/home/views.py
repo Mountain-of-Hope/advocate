@@ -37,14 +37,13 @@ def index(request):
             pay.amount = form['amount'].data
             pay.checkNumber = form['checkNumber'].data
             pay.date = form['date'].data
-            pay.purpose = form['purpose'].data
             pay.method = form['method'].data
 
             pay.save()
             return HttpResponseRedirect('payments.html')
     else:
         form = PaymentForm()
-        context = {'form':form}
+        context = {'payForm':form}
         # context['form'] = form
     
     #context = {'segment': 'index'}
@@ -65,12 +64,25 @@ def Sponsor_Add(request):
             return HttpResponseRedirect('../sponsors.html')
 
 
+def Donation_Add(request):
+
+        if request.method == 'POST':
+            form = PaymentForm(request.POST)
+            if form.is_valid():
+                pay = form.save(commit=False)
+                pay.save()
+            else:
+                form = PaymentForm()
+            return HttpResponseRedirect('../payments.html')
+
+
 # needs to be refactored to use dedicated functions for each view
 @login_required(login_url="/login/")
 def pages(request):
     pays = Payment.objects.all()
     students = Student.objects.all()
     donors = Donor.objects.all()
+    paymentForm = PaymentForm()
 
 
     projects = Program.objects.all()
@@ -79,7 +91,8 @@ def pages(request):
                'payments':pays,
                'donors':donors,
                'projects':projects,
-               'churches':churches
+               'churches':churches,
+               'payForm': paymentForm
                }
     
 
