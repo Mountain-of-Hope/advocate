@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
+if os.environ.get('ADVOCATE_DB_ENGINE') == "mysql":
     DATABASES = { 
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
