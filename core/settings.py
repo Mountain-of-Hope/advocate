@@ -23,7 +23,7 @@ SECRET_KEY = env('SECRET_KEY', default='testing123!@')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 # Assets Management
-ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/staticfiles/assets') 
+ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets') 
 
 # load production server from .env
 ALLOWED_HOSTS        = ['18.206.148.137', '127.0.0.1', 'advocate-env.eba-jks23pkf.us-east-1.elasticbeanstalk.com', '172.31.23.168', '34.229.171.140' ]
@@ -143,12 +143,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
-STATIC_URL = '/staticfiles/'
+STATIC_ROOT = os.path.join(CORE_DIR, 'static')
+STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(CORE_DIR, 'apps/staticfiles'),
+    os.path.join(CORE_DIR, 'apps/static'),
 ) 
 
 #############################################################
