@@ -16,7 +16,7 @@ django-allauth
 django-environ
 django-feather
 django-phonenumber-field
-django-pwa=
+django-pwa
 django-sslserver
 gunicorn
 idna
