@@ -23,7 +23,7 @@ SECRET_KEY = env('SECRET_KEY', default='testing123!@')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 # Assets Management
-ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets') 
+ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/staticfiles/assets') 
 
 # load production server from .env
 ALLOWED_HOSTS        = ['18.206.148.137', '127.0.0.1', 'advocate-env.eba-jks23pkf.us-east-1.elasticbeanstalk.com', '172.31.23.168', '34.229.171.140' ]
@@ -148,7 +148,7 @@ STATIC_URL = '/staticfiles/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(CORE_DIR, 'apps/static'),
+    os.path.join(CORE_DIR, 'apps/staticfiles'),
 ) 
 
 #############################################################
