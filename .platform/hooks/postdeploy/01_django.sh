@@ -9,4 +9,5 @@ python manage.py showmigrations;
 # migrate the rest
 python manage.py migrate --noinput;
 # another command to create a superuser (write your own)
+python manage.py createsuperuser --noinput;
 }
