@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import forms
 from django.forms import ModelForm, TextInput, DateInput, NumberInput, Select, Textarea, EmailInput
-from .models import Payment, Church, Donor, Student, Program
+from .models import Payment, Group, Donor, Student, Program
 
 
 class DonorForm(ModelForm):
@@ -78,7 +78,7 @@ class StudentForm(ModelForm):
 
 class ChurchForm(ModelForm):
     class Meta:
-        model = Church
+        model = Group
         fields = '__all__'
         widgets ={
            'name': TextInput(attrs={

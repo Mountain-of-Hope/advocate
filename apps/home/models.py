@@ -3,16 +3,9 @@
 from django.db import models
 from address.models import AddressField
 from phonenumber_field.modelfields  import PhoneNumberField
-from django.contrib.auth.models import User
-from django import template
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
-
-# Program choices
-PROGRAM_CHOICES = (
-    ("project", "Project"),
-    ("program", "Program"),
-)
 
 # Program choices
 PAYMENT_CHOICES = (
@@ -20,42 +13,40 @@ PAYMENT_CHOICES = (
     ("Online", "Online"),
 )
 
-class Program(models.Model):
-    name = models.CharField(max_length=255)
-    type = models.CharField(max_length=20, choices=PROGRAM_CHOICES, default='program')
-    description = models.CharField(max_length=255, blank=True)
-    cost = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-
-    def __str__(self):
-        return self.name
-
-class Church (models.Model):
-    name = models.CharField(max_length=255)
-    address = AddressField()
-    email = models.EmailField(null=True)
-    phone = PhoneNumberField(blank=True)
-
-    def __str__(self):
-        return self.name
-
-class Donor (models.Model):
+class Sponsor(models.Model):
     name = models.CharField(max_length=255)
     address = AddressField(on_delete=models.CASCADE)
     email = models.EmailField(null=True)
     phone = PhoneNumberField(blank=True)
-    church = models.ForeignKey(Church, on_delete=models.CASCADE, null=True, blank=True)
+
+class Program(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
+    cost = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    interval = models.IntegerField(default=1, validators=[MaxValueValidator(12), MinValueValidator(1)])
+
+    def __str__(self):
+        return self.name
+
+#TODO: Add primary contact field related to a person class
+class Group (Sponsor):
+    def __str__(self):
+        return self.name
+    
+class Donor (Sponsor):
+    church = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
     
 class Student(models.Model):
     enroll_date = models.DateField(null=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=256)
     dob = models.DateField(null=True)
     community = models.CharField(max_length=255, null=True)
     program = models.ForeignKey(Program,on_delete=models.CASCADE, null=True, blank=True)
     grade = models.CharField(max_length=255, null=True)
-    sponsor = models.ManyToManyField(Donor, null=True, blank=True)
+    sponsor = models.ManyToManyField(Sponsor, null=True, blank=True)
 
     def __str__(self):
         return self.name

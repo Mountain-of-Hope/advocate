@@ -10,7 +10,7 @@ from django.template import loader
 from django.core.paginator import Paginator
 from .forms import PaymentForm, ChurchForm, DonorForm, StudentForm, ProgramForm
 from django.urls import reverse
-from .models import Payment, Student, Church, Donor, Program, AddressField
+from .models import Payment, Student, Group, Donor, Program, AddressField
 from django.shortcuts import get_object_or_404, render, redirect
 from datetime import datetime
 import csv, io
@@ -86,7 +86,7 @@ def pages(request):
 
 
     projects = Program.objects.all()
-    churches = Church.objects.all()
+    churches = Group.objects.all()
     context = {'students':students,
                'payments':pays,
                'donors':donors,
@@ -114,7 +114,7 @@ def pages(request):
                 resultsPaymentsDonor = Payment.objects.filter(donor__name__contains=searchText)
                 resultsPaymentsStudent = Payment.objects.filter(student__name__contains=searchText)
                 resultsPrograms = Program.objects.filter(name__contains=searchText)
-                resultsGroups = Church.objects.filter(name__contains=searchText)
+                resultsGroups = Group.objects.filter(name__contains=searchText)
                 results = chain(resultsDonors, resultsStudents, resultsPrograms, resultsGroups, resultsPaymentsDonor, resultsPaymentsStudent)
 
                 context['results'] = results
@@ -289,7 +289,7 @@ def Payment_Detail(request, id):
 
 @login_required(login_url="/login/")
 def Group_Detail(request, id):
-    group = Church.objects.get(id=id)
+    group = Group.objects.get(id=id)
     template = loader.get_template('home/group.html')
 
     if request.method == 'POST':
@@ -386,7 +386,7 @@ def Delete_Data(request):
     Program.objects.all().delete()
     Donor.objects.all().delete()
     Student.objects.all().delete()
-    Church.objects.all().delete()
+    Group.objects.all().delete()
 
     
     return HttpResponseRedirect('../')
@@ -466,7 +466,7 @@ def Student_Delete(request, id):
     return HttpResponseRedirect("../../students.html")
 
 def Group_Delete(request, id):
-    group = Church.objects.get(pk=id)
+    group = Group.objects.get(pk=id)
     group.delete()
     return HttpResponseRedirect("../../groups.html")
 
