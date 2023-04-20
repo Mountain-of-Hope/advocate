@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Payments {% endblock %} 
+{% block title %} Payments {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -35,7 +35,7 @@
                     <div class="main-body">
                         <div class="page-wrapper">
                             <!-- [ Main Content ] start -->
-                            
+
                             <div class="row">
                                 <!-- [ Hover-table ] start -->
                                 <div class="col-xl-12">
@@ -50,6 +50,7 @@
                                                             <th>Student</th>
                                                             <th>Method</th>
                                                             <th>Amount</th>
+                                                            <th>Duration (Days)</th>
                                                             <th>Date</th>
                                                             <th class="text-right"></th>
                                                         </tr>
@@ -62,8 +63,9 @@
                                                             <td>{{i.student}}</td>
                                                             <td>{{i.method}}</td>
                                                             <td>{{i.amount}}</td>
+                                                            <td>{{i.duration}}</td>
                                                             <td>{{i.date}}</td>
-                                                            <td> 
+                                                            <td>
                                                                 <a href="payment/{{i.id}}">
                                                                     <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit" data-toggle="modal" data-target="#emailModal"></button>
                                                                 </a>

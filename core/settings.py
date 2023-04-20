@@ -23,11 +23,11 @@ SECRET_KEY = env('SECRET_KEY', default='testing123!@')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 # Assets Management
-ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets') 
+ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
 
 # load production server from .env
 ALLOWED_HOSTS        = ['18.206.148.137', '127.0.0.1', 'advocate-env.eba-jks23pkf.us-east-1.elasticbeanstalk.com', '172.31.23.168', '34.229.171.140' ]
-#CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'http://127.0.0.1:5085', 'https://' + env('SERVER', default='127.0.0.1') ] # Dev only
 
 # Application definition
 
@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     'apps.home',                                    # Enable the inner home (home)
     'allauth',                                      # OAuth new
     'allauth.account',                              # OAuth new
-    'allauth.socialaccount',                        # OAuth new 
-    'allauth.socialaccount.providers.github',       # OAuth new 
-    'allauth.socialaccount.providers.twitter',      # OAuth new  
+    'allauth.socialaccount',                        # OAuth new
+    'allauth.socialaccount.providers.github',       # OAuth new
+    'allauth.socialaccount.providers.twitter',      # OAuth new
     "sslserver",
     "address",
     "phonenumber_field",
@@ -89,11 +89,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 if os.environ.get('ADVOCATE_DB_ENGINE') == "mysql":
-    DATABASES = { 
+    DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        } 
+        }
     }
 else:
     DATABASES = {
@@ -106,6 +106,14 @@ else:
             'PORT': os.environ['RDS_PORT'],
     },
 }
+
+# DEV ONLY
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         }
+#     }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -149,7 +157,7 @@ STATIC_URL = '/static/'
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(CORE_DIR, 'apps/static'),
-) 
+)
 
 #############################################################
 # Google Maps API
@@ -158,7 +166,7 @@ GOOGLE_API_KEY = ''
 #############################################################
 PHONENUMBER_FORMAT_REGION = 'US'
 
-# OAuth settings 
+# OAuth settings
 
 GITHUB_ID     = os.getenv('GITHUB_ID', None)
 GITHUB_SECRET = os.getenv('GITHUB_SECRET', None)
@@ -169,7 +177,7 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-SITE_ID                    = 1 
+SITE_ID                    = 1
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 SOCIALACCOUNT_PROVIDERS = {}
@@ -182,4 +190,3 @@ if GITHUB_AUTH:
             'key': ''
         }
     }
-

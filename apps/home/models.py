@@ -47,7 +47,7 @@ class Donor (models.Model):
 
     def __str__(self):
         return self.name
-    
+
 class Student(models.Model):
     enroll_date = models.DateField(null=True)
     name = models.CharField(max_length=255)
@@ -59,14 +59,15 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def GetSponsorName(self):
         return self.sponsor.name
-    
+
 class Payment(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True) 
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True)
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE, null=True, blank=True)
     method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='Check')
     checkNumber = models.IntegerField(default=0)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
+    duration = models.IntegerField(default=None)
     date = models.CharField(default="", max_length=255)
