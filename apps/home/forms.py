@@ -124,6 +124,10 @@ class PaymentForm(ModelForm):
             'class': 'form-control',
             'placeholder':'Payment Date'
            }),
+          'duration': NumberInput(attrs={
+           'class': 'form-control',
+           'placeholder':'Days of funding'
+          }),
            'student': Select(attrs={
             'class': 'form-control',
             'placeholder':'What was this payment for?'
