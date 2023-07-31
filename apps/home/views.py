@@ -137,6 +137,9 @@ def pages(request):
                 months_to_be_funded = diff_month(funded_thru, student.enroll_date)
                 expected_amount = program_cost * months_to_be_funded
 
+                #need donor under/overfunded?
+                #why is the student over/underfunded?
+
 
                 # How much do they actually have?
                 total = Decimal()
