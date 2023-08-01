@@ -25,7 +25,7 @@ class Person(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     email = models.EmailField(max_length=254, blank=True)
     address = models.TextField(blank=True)
-    phone = models.CharField(blank=True)
+    phone = models.CharField(max_length=25, blank=True)
 
     class Meta:
         abstract = True
@@ -37,8 +37,9 @@ class Group(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=254, blank=True)
     address = models.TextField(blank=True)
-    phone = models.CharField(blank=True)
-    members = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
+    phone = models.CharField(max_length=25, blank=True)
+
+    #implement a get members function here?
 
 
 class Donation(models.Model):
