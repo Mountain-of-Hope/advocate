@@ -11,12 +11,9 @@ cryptography
 defusedxml
 dj-database-url
 Django
-django-address
 django-allauth
 django-environ
 django-feather
-django-phonenumber-field
-django-pwa
 django-sslserver
 gunicorn
 idna

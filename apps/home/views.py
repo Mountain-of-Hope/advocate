@@ -66,6 +66,10 @@ def Donation_Add(request):
         else:
             form = DonationForm()
         return HttpResponseRedirect('../payments.html')
+    
+def Donations(request):
+    print("HERE!")
+    return HttpResponseRedirect('donations.html')
 
 
 # needs to be refactored to use dedicated functions for each view

@@ -12,6 +12,7 @@ urlpatterns = [
     path('', views.index, name='home'),
     # Student Details
     path('payment/<int:id>', views.Payment_Detail, name='payment_details'),
+    path('donations', views.Donations, name='donations'), 
     path('payment/add', views.Donation_Add, name='payment_add'),
     path('payment/<int:id>/delete', views.Payment_Delete, name='payment_delete'),
     path('sponsor/<int:id>', views.Sponsor_Detail, name='sponsor_details'),

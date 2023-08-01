@@ -83,11 +83,11 @@ class Sponsorship(models.Model):
     
 class Beneficiary(Person):
     enroll_date = models.DateField(null=True)
-    sponsorships = models.ManyToManyField(Sponsorship, blank=True, null=True)
+    sponsorships = models.ManyToManyField(Sponsorship, blank=True)
 
 
 class Donor(Person):
-    sponsorships = models.ManyToManyField(Sponsorship, blank=True, null=True)
+    sponsorships = models.ManyToManyField(Sponsorship, blank=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
-    donations = models.ManyToManyField(Donation,blank=True, null=True)
+    donations = models.ManyToManyField(Donation,blank=True)
 
