@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import forms
 from django.forms import ModelForm, TextInput, DateInput, NumberInput, Select, Textarea, EmailInput
-from .models import Donation, Group, Donor, Beneficiary, SponsorshipType
+from .models import Donation, Group, Donor, Beneficiary, SponsorshipType, Sponsorship
 
 
 class DonorForm(ModelForm):
@@ -32,4 +32,9 @@ class DonationForm(ModelForm):
 class SponsorshipTypeForm(ModelForm):
     class Meta:
         model = SponsorshipType
+        fields = "__all__"
+
+class SponsorshipForm(ModelForm):
+    class Meta:
+        model = Sponsorship
         fields = "__all__"

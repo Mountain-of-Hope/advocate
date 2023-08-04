@@ -15,6 +15,7 @@ django-allauth
 django-environ
 django-feather
 django-sslserver
+django-funky-sheets
 gunicorn
 idna
 jmespath

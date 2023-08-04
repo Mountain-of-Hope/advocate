@@ -18,15 +18,15 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12">
                                     <div class="page-header-title">
-                                        <h5 class="m-b-10">Donations</h5>
+                                        <h5 class="m-b-10">Sponsorships</h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="#!">Donations</a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">All Donations</a></li>
+                                        <li class="breadcrumb-item"><a href="#!">Sponsorship</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">All Sponsorships</a></li>
                                     </ul>
                                         <!--<button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#importPayment" aria-describedby="Import Payments from Excel">Import</button>-->
-                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a manual payment" data-target="#paymentModal" aria-describedby="Import Payments from Excel">Record Donation</button>
+                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a sponsor" data-target="#sponsorModal" aria-describedby="Import Payments from Excel">Add Sponsor</button>
                                 </div>
                             </div>
                         </div>
@@ -45,27 +45,23 @@
                                                 <table class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>Donation #</th>
-                                                            <th>Donor</th>
-                                                            <th>Purpose</th>
-                                                            <th>Method</th>
-                                                            <th>Amount</th>
-                                                            <th>Date</th>
+                                                            <th>Sponsorship ID</th>
+                                                            <th>Status</th>
+                                                            <th>Begin Date</th>
+                                                            <th>Payment Interval</th>
                                                             <th class="text-right"></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {% for i in donations %}
+                                                        {% for i in sponsorships %}
 
                                                             <tr>
                                                                 <th scope="row">{{i.id}}</th>
-                                                                <td>{{i.donor}}</td>
-                                                                <td>{{i.receiver}}</td>
-                                                                <td>{{i.method}}</td>
-                                                                <td>{{i.amount}}</td>
-                                                                <td>{{i.date}}</td>
+                                                                <td>{{i.status}}</td>
+                                                                <td>{{i.begin_date}}</td>
+                                                                <td>{{i.payment_interval}}</td>
                                                                 <td>
-                                                                    <a href="donation/{{i.id}}">
+                                                                    <a href="sponsorship/{{i.id}}">
                                                                         <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit"></button>
                                                                     </a>
                                                                 </td>
@@ -85,6 +81,30 @@
                 </div>
             </div>
         </div>
+        {% comment %} Add item Modal {% endcomment %}
+        <div class="modal fade" id="sponsorModal" tabindex="-1" role="dialog" aria-labelledby="sponsorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="sponsorModalLabel">Add Sponsorship</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form action="sponsorship/add" method="POST">
+                        {% csrf_token %}
+                        <table>
+                            {{form.as_table}}
+                        </table>
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
         {% comment %} Email Modal {% endcomment %}
         <div class="modal fade" id="importPayment" tabindex="-1" role="dialog" aria-labelledby="importPaymentModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

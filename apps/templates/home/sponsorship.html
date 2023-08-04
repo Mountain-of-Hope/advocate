@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Sponsorship Details {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Edit Sponsorship</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row">
+
+                                                <form action="{{sponsor.id}}" method="POST">
+                                                    {% csrf_token %}
+                                                    {{form.as_p}}
+                                                    <input type="submit" value="Submit">
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-danger" title="" data-toggle="modal" data-original-title="Delete this sponsor" data-target="#sponsorModal" aria-describedby="Delete this sponsor">Delete Sponsor</button>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    {% comment %} Delete Modal {% endcomment %}
+    <div class="modal fade" id="sponsorModal" tabindex="-1" role="dialog" aria-labelledby="sponsorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sponsorModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="..{{request.path}}/delete"><button type="submit" class="btn btn-danger">Yes</button></a>
+            </div>
+            <div class="modal-footer">
+                
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

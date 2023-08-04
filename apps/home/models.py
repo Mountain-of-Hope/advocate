@@ -3,6 +3,8 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
+from django import template
 
 # Create your models here.
 # Program choices
@@ -48,10 +50,16 @@ class Donation(models.Model):
     method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='Check')
 
     # Generic foreign key fields
+    # The donor of a donation object could be the individual or group giving money
+    donor_content_type = models.ForeignKey(ContentType, related_name='donor_content_type', on_delete=models.CASCADE)
+    donor_object_id = models.PositiveIntegerField()
+    donor = GenericForeignKey('donor_content_type', 'donor_object_id')
+
+    # Generic foreign key fields
     # The receiver of a donation object could be a Beneficiary or a generic program (like a water project)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    receiver = GenericForeignKey('content_type', 'object_id')
+    receiver_content_type = models.ForeignKey(ContentType, related_name='receiver_content_type', on_delete=models.CASCADE)
+    receiver_object_id = models.PositiveIntegerField()
+    receiver = GenericForeignKey('receiver_content_type', 'receiver_object_id')
 
 
     
@@ -62,10 +70,11 @@ class SponsorshipType(models.Model):
 
 class Sponsorship(models.Model):
     type = models.ForeignKey(SponsorshipType, on_delete=models.CASCADE)
-    begin_date = models.DateField()
-    end_date = models.DateField(null=True)
-    payment_interval = models.CharField(max_length=20, choices=PAYMENT_INTERVALS, default='Monthly')
+    begin_date = models.DateField(blank=True)
+    end_date = models.DateField(blank=True)
+    payment_interval = models.IntegerField(choices=PAYMENT_INTERVALS, default='Monthly')
     additional_cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    # TODO: add status field?
 
     @property
     def total_cost(self):
@@ -89,5 +98,5 @@ class Beneficiary(Person):
 class Donor(Person):
     sponsorships = models.ManyToManyField(Sponsorship, blank=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
-    donations = models.ManyToManyField(Donation,blank=True)
+    #donations = models.ManyToManyField(Donation,blank=True)
 

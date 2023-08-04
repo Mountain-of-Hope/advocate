@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>
-        Mountain of Hope - {% block title %}{% endblock %} | Advocate
+        MoH - {% block title %}{% endblock %} | Advocate
     </title>
     <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -62,16 +62,16 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="paymentModalLabel">Log Payment</h5>
+              <h5 class="modal-title" id="paymentModalLabel">Record Donation</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-                <form action="{% url 'payment_add' %}" method="POST">
+                <form action="{% url 'donation_add' %}" method="POST">
                     {% csrf_token %}
                     <table>
-                        {{payForm.as_table}}
+                        {{donationForm.as_table}}
                     </table>
                     <input type="submit" value="Submit">
                 </form>

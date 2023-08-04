@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',       # OAuth new
     'allauth.socialaccount.providers.twitter',      # OAuth new
     "sslserver",
-    "address",
-    "phonenumber_field",
+    "funky_sheets",
 ]
 
 MIDDLEWARE = [
@@ -64,6 +63,7 @@ ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
 LOGOUT_REDIRECT_URL = "home"  # Route defined in home/urls.py
 TEMPLATE_DIR = os.path.join(CORE_DIR, "apps/templates")  # ROOT dir for templates
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 
 TEMPLATES = [
