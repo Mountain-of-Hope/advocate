@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from django.db import models
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django import template
@@ -35,6 +35,9 @@ class Person(models.Model):
     def __str__(self):
         return self.name
     
+class Project(models.Model):
+    pass
+    
 class Group(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=254, blank=True)
@@ -42,32 +45,18 @@ class Group(models.Model):
     phone = models.CharField(max_length=25, blank=True)
 
     #implement a get members function here?
-
-
-class Donation(models.Model):
-    date = models.CharField(default="", max_length=255)
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
-    method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='Check')
-
-    # Generic foreign key fields
-    # The donor of a donation object could be the individual or group giving money
-    donor_content_type = models.ForeignKey(ContentType, related_name='donor_content_type', on_delete=models.CASCADE)
-    donor_object_id = models.PositiveIntegerField()
-    donor = GenericForeignKey('donor_content_type', 'donor_object_id')
-
-    # Generic foreign key fields
-    # The receiver of a donation object could be a Beneficiary or a generic program (like a water project)
-    receiver_content_type = models.ForeignKey(ContentType, related_name='receiver_content_type', on_delete=models.CASCADE)
-    receiver_object_id = models.PositiveIntegerField()
-    receiver = GenericForeignKey('receiver_content_type', 'receiver_object_id')
-
-
     
+    def __str__(self):
+        return self.name
+    
+        
 class SponsorshipType(models.Model):
     name = models.CharField(max_length=35)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
-
-
+        
+    def __str__(self):
+        return self.name
+    
 class Sponsorship(models.Model):
     type = models.ForeignKey(SponsorshipType, on_delete=models.CASCADE)
     begin_date = models.DateField(blank=True)
@@ -89,14 +78,50 @@ class Sponsorship(models.Model):
         else:
             return True
     
-    
-class Beneficiary(Person):
-    enroll_date = models.DateField(null=True)
-    sponsorships = models.ManyToManyField(Sponsorship, blank=True)
-
-
 class Donor(Person):
     sponsorships = models.ManyToManyField(Sponsorship, blank=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
-    #donations = models.ManyToManyField(Donation,blank=True)
+    #donations = GenericRelation(Donation, related_query_name='donations')
+    
+
+    def __str__(self):
+        return self.name
+    
+class Giver(models.Model):
+    group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.CASCADE)
+    donor = models.OneToOneField(Donor, null=True, blank=True, on_delete=models.CASCADE)
+
+
+class Beneficiary(Person):
+    enroll_date = models.DateField(null=True)
+    sponsorships = models.ManyToManyField(Sponsorship, blank=True)
+    #donations = GenericRelation(Donation, related_query_name='donations')
+
+    def __str__(self):
+        return self.name
+
+
+class Receiver(models.Model):
+    project = models.OneToOneField(Project, null=True, blank=True, on_delete=models.CASCADE)
+    beneficiary = models.OneToOneField(Beneficiary, null=True, blank=True, on_delete=models.CASCADE)
+
+class Donation(models.Model):
+    date = models.CharField(default="", max_length=255)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='Check')
+
+    # The donor of a donation object could be the individual or group giving money
+    donor = models.ForeignKey(Giver, on_delete=models.PROTECT)
+
+
+    # The receiver of a donation object could be a Beneficiary or a generic program (like a water project)
+    beneficiary = models.ForeignKey(Receiver, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
 
