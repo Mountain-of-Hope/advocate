@@ -104,10 +104,21 @@ def Donation_Add(request):
     if request.method == 'POST':
         form = DonationForm(request.POST)
         if form.is_valid():
+            donor_id = request.POST.get('donor')
+            beneficiary_id = request.POST.get('beneficiary')
+
+            donor = Donor.objects.get(pk=donor_id)
+            beneficiary = Beneficiary.objects.get(pk=beneficiary_id)
+
+
             donation = form.save(commit=False)
+            donation.donor = donor
+            donation.beneficiary = beneficiary
             donation.save()
         else:
+            print(form.errors)
             form = DonationForm()
+            
         return HttpResponseRedirect('../donations.html')
     
 @login_required
@@ -116,11 +127,13 @@ def Donations(request):
     donations = Donation.objects.all()
     students = Beneficiary.objects.all()
     donors = Donor.objects.all()
+    
     donationForm = DonationForm()
 
 
     projects = SponsorshipType.objects.all()
     churches = Group.objects.all()
+    all_donors =  list(donors.values_list('id', 'name')) + list(churches.values_list('id', 'name'))
     context = {'students':students,
                'donations':donations,
                'donors':donors,
@@ -135,8 +148,12 @@ def Donations(request):
             donation = Donation(commit=False)
             donation.save()
             return HttpResponseRedirect('donations.html')
+        else:
+            print(form.errors)
     else:
         form = DonationForm()
+        form.fields['donor'].choices = [("", "---------")] + all_donors
+        form.fields['beneficiary'].queryset = students
         context['form'] = form
 
     context['segment'] = load_template
