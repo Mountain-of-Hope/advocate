@@ -10,7 +10,7 @@ from django.template import loader
 from django.core.paginator import Paginator
 from .forms import DonationForm, GroupForm, DonorForm, StudentForm, SponsorshipTypeForm, SponsorshipForm
 from django.urls import reverse, reverse_lazy
-from .models import Donation, Beneficiary, Group, Donor, SponsorshipType, Sponsorship
+from .models import Donation, Beneficiary, Group, Donor, SponsorshipType, Sponsorship, Giver, Receiver
 from django.shortcuts import get_object_or_404, render, redirect
 from funky_sheets.formsets import HotView
 from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
@@ -102,24 +102,39 @@ def Sponsor_Add(request):
 def Donation_Add(request):
 
     if request.method == 'POST':
+        
         form = DonationForm(request.POST)
+
+        donor_id = request.POST.get('donor')
+        beneficiary_id = request.POST.get('beneficiary')
+
+        donor = Donor.objects.get(pk=donor_id)
+        giver = Giver.objects.get_or_create(donor=donor)
+        
+        beneficiary = Beneficiary.objects.get(pk=beneficiary_id)
+        receiver = Receiver.objects.get(beneficiary=beneficiary)
+
+        receiver.beneficiary = beneficiary
+        
         if form.is_valid():
-            donor_id = request.POST.get('donor')
-            beneficiary_id = request.POST.get('beneficiary')
-
-            donor = Donor.objects.get(pk=donor_id)
-            beneficiary = Beneficiary.objects.get(pk=beneficiary_id)
-
-
-            donation = form.save(commit=False)
-            donation.donor = donor
-            donation.beneficiary = beneficiary
-            donation.save()
-        else:
-            print(form.errors)
-            form = DonationForm()
+            donation = Donation()
+            donation.date = form.cleaned_data['date']
+            donation.amount = form.cleaned_data['amount']
+            donation.method = form.cleaned_data['method']
+            donation.donor = giver[0]
+            donation.beneficiary = receiver
             
-        return HttpResponseRedirect('../donations.html')
+            donation.save()
+        
+            
+
+
+
+    else:
+        print(form.errors.values)
+        form = DonationForm()
+            
+    return HttpResponseRedirect('../donations.html')
     
 @login_required
 def Donations(request):
@@ -127,13 +142,13 @@ def Donations(request):
     donations = Donation.objects.all()
     students = Beneficiary.objects.all()
     donors = Donor.objects.all()
+    projects = SponsorshipType.objects.all()
+    churches = Group.objects.all()
+    all_donors =  list(donors.values_list('id', 'name' )) + list(churches.values_list('id', 'name'))
+    print(type(churches.values_list()))
     
     donationForm = DonationForm()
 
-
-    projects = SponsorshipType.objects.all()
-    churches = Group.objects.all()
-    all_donors =  list(donors.values_list('id', 'name')) + list(churches.values_list('id', 'name'))
     context = {'students':students,
                'donations':donations,
                'donors':donors,
@@ -141,6 +156,7 @@ def Donations(request):
                'churches':churches,
                'donationForm': donationForm
                }
+    
     if request.method == 'POST':
         form = DonationForm(request.POST)
     
@@ -278,6 +294,8 @@ def pages(request):
                 student.save()
                 #donor = form.cleaned_data['donor'].first()
                 #student.sponsor.add(newSponsor)
+                beneficiary = Receiver()
+                beneficiary.beneficiary = student
                 form.save_m2m()
 
                 return HttpResponseRedirect('students.html')
@@ -292,6 +310,9 @@ def pages(request):
             if form.is_valid():
                 donor = form.save(commit=False)
                 donor.save()
+                giver = Giver()
+                giver.donor = donor
+                giver.save()
 
                 return HttpResponseRedirect('sponsors.html')
             else:
@@ -314,6 +335,9 @@ def pages(request):
             if form.is_valid():
                 church = form.save(commit=False)
                 church.save()
+                giver = Giver()
+                giver.group = church
+                giver.save()
 
                 return HttpResponseRedirect('groups.html')
             else:
@@ -555,6 +579,7 @@ def Sponsorship_Delete(request, id):
     return HttpResponseRedirect("../../sponsorships.html")
 
 def Sponsor_Delete(request, id):
+    #figure out what to do with this sponsor's associated records (donations, beneficiaries, groups, etc)
     sponsor = Donor.objects.get(pk=id)
     sponsor.delete()
     return HttpResponseRedirect("../../sponsors.html")

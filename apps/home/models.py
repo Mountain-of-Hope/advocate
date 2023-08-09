@@ -92,6 +92,7 @@ class Giver(models.Model):
     donor = models.OneToOneField(Donor, null=True, blank=True, on_delete=models.CASCADE)
 
 
+
 class Beneficiary(Person):
     enroll_date = models.DateField(null=True)
     sponsorships = models.ManyToManyField(Sponsorship, blank=True)
@@ -112,7 +113,6 @@ class Donation(models.Model):
 
     # The donor of a donation object could be the individual or group giving money
     donor = models.ForeignKey(Giver, on_delete=models.PROTECT)
-
 
     # The receiver of a donation object could be a Beneficiary or a generic program (like a water project)
     beneficiary = models.ForeignKey(Receiver, on_delete=models.PROTECT)

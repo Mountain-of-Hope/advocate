@@ -56,11 +56,21 @@
                                                     </thead>
                                                     <tbody>
                                                         {% for i in donations %}
-
+                                                            
                                                             <tr>
                                                                 <th scope="row">{{i.id}}</th>
-                                                                <td>{{i.donor}}</td>
-                                                                <td>{{i.receiver}}</td>
+                                                                <td>
+                                                                    {% if i.donor.donor %}
+                                                                        {{i.donor.donor.name}}
+                                                                    {% elif i.donor.group %}
+                                                                        {{i.donor.group.name}}
+                                                                    {% else %}
+                                                                        Unknown Donor
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>
+                                                                    {{i.beneficiary}}
+                                                                    {{i.beneficiary.name}}</td>
                                                                 <td>{{i.method}}</td>
                                                                 <td>{{i.amount}}</td>
                                                                 <td>{{i.date}}</td>
