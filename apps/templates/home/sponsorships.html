@@ -26,7 +26,7 @@
                                         <li class="breadcrumb-item"><a href="javascript:">All Sponsorships</a></li>
                                     </ul>
                                         <!--<button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#importPayment" aria-describedby="Import Payments from Excel">Import</button>-->
-                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a sponsor" data-target="#sponsorModal" aria-describedby="Import Payments from Excel">Add Sponsor</button>
+                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a sponsor" data-target="#sponsorModal" aria-describedby="Import Payments from Excel">Add Sponsorship</button>
                                 </div>
                             </div>
                         </div>
@@ -46,9 +46,11 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Sponsorship ID</th>
-                                                            <th>Status</th>
                                                             <th>Begin Date</th>
+                                                            <th>Sponsor</th>
+                                                            <th>Student</th>
                                                             <th>Payment Interval</th>
+                                                            <th>Add. Cost</th>
                                                             <th class="text-right"></th>
                                                         </tr>
                                                     </thead>
@@ -57,9 +59,24 @@
 
                                                             <tr>
                                                                 <th scope="row">{{i.id}}</th>
-                                                                <td>{{i.status}}</td>
                                                                 <td>{{i.begin_date}}</td>
-                                                                <td>{{i.payment_interval}}</td>
+                                                                
+                                                                {% for d in i.donor.all %}
+                                                                    <td>{{ d }}</td>
+                                                                {% endfor%}
+
+                                                                <td>{{ i.beneficiary }}</td>
+
+                                                                {% if i.payment_interval == 1 %}
+                                                                  <td>Monthly</td>
+                                                                {% elif i.payment_interval == 3 %}
+                                                                  <td>Quarterly</td>
+                                                                {% elif i.payment_interval == 6 %}
+                                                                  <td>Biannual</td>
+                                                                {% elif i.payment_interval == 12 %}
+                                                                  <td>Yearly</td>
+                                                                {%endif%}
+                                                                <td>${{i.additional_cost}}</td>
                                                                 <td>
                                                                     <a href="sponsorship/{{i.id}}">
                                                                         <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit"></button>

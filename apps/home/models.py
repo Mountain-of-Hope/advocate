@@ -57,12 +57,31 @@ class SponsorshipType(models.Model):
     def __str__(self):
         return self.name
     
+class Donor(Person):
+    #sponsorships = models.ManyToManyField(Sponsorship, blank=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
+    #donations = GenericRelation(Donation, related_query_name='donations')
+    
+
+    def __str__(self):
+        return self.name
+    
+class Beneficiary(Person):
+    enroll_date = models.DateField(null=True)
+    #sponsorships = models.ManyToManyField(Sponsorship, blank=True)
+    #donations = GenericRelation(Donation, related_query_name='donations')
+
+    def __str__(self):
+        return self.name
+
 class Sponsorship(models.Model):
     type = models.ForeignKey(SponsorshipType, on_delete=models.CASCADE)
     begin_date = models.DateField(blank=True)
-    end_date = models.DateField(blank=True)
+    end_date = models.DateField(blank=True, null=True)
     payment_interval = models.IntegerField(choices=PAYMENT_INTERVALS, default='Monthly')
-    additional_cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    additional_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    donor = models.ManyToManyField(Donor)
+    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.PROTECT)
     # TODO: add status field?
 
     @property
@@ -78,33 +97,9 @@ class Sponsorship(models.Model):
         else:
             return True
     
-class Donor(Person):
-    sponsorships = models.ManyToManyField(Sponsorship, blank=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
-    #donations = GenericRelation(Donation, related_query_name='donations')
-    
-
-    def __str__(self):
-        return self.name
-    
-class Giver(models.Model):
-    group = models.OneToOneField(Group, null=True, blank=True, on_delete=models.CASCADE)
-    donor = models.OneToOneField(Donor, null=True, blank=True, on_delete=models.CASCADE)
 
 
 
-class Beneficiary(Person):
-    enroll_date = models.DateField(null=True)
-    sponsorships = models.ManyToManyField(Sponsorship, blank=True)
-    #donations = GenericRelation(Donation, related_query_name='donations')
-
-    def __str__(self):
-        return self.name
-
-
-class Receiver(models.Model):
-    project = models.OneToOneField(Project, null=True, blank=True, on_delete=models.CASCADE)
-    beneficiary = models.OneToOneField(Beneficiary, null=True, blank=True, on_delete=models.CASCADE)
 
 class Donation(models.Model):
     date = models.CharField(default="", max_length=255)
@@ -112,10 +107,11 @@ class Donation(models.Model):
     method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='Check')
 
     # The donor of a donation object could be the individual or group giving money
-    donor = models.ForeignKey(Giver, on_delete=models.PROTECT)
+    donor = models.ForeignKey(Donor, on_delete=models.CASCADE, blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
 
     # The receiver of a donation object could be a Beneficiary or a generic program (like a water project)
-    beneficiary = models.ForeignKey(Receiver, on_delete=models.PROTECT)
+    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.name

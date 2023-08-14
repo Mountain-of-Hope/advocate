@@ -60,17 +60,17 @@
                                                             <tr>
                                                                 <th scope="row">{{i.id}}</th>
                                                                 <td>
-                                                                    {% if i.donor.donor %}
-                                                                        {{i.donor.donor.name}}
-                                                                    {% elif i.donor.group %}
-                                                                        {{i.donor.group.name}}
+                                                                    {% if i.donor and i.group %}
+                                                                        {{i.donor}} ({{i.group}})
+                                                                    {% elif i.donor %}
+                                                                        {{i.donor}}
+                                                                    {% elif i.group %}
+                                                                        {{i.group}}
                                                                     {% else %}
                                                                         Unknown Donor
                                                                     {% endif %}
                                                                 </td>
-                                                                <td>
-                                                                    {{i.beneficiary}}
-                                                                    {{i.beneficiary.name}}</td>
+                                                                <td>{{i.beneficiary}}</td>
                                                                 <td>{{i.method}}</td>
                                                                 <td>{{i.amount}}</td>
                                                                 <td>{{i.date}}</td>

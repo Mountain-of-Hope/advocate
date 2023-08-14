@@ -10,7 +10,7 @@ from django.template import loader
 from django.core.paginator import Paginator
 from .forms import DonationForm, GroupForm, DonorForm, StudentForm, SponsorshipTypeForm, SponsorshipForm
 from django.urls import reverse, reverse_lazy
-from .models import Donation, Beneficiary, Group, Donor, SponsorshipType, Sponsorship, Giver, Receiver
+from .models import Donation, Beneficiary, Group, Donor, SponsorshipType, Sponsorship
 from django.shortcuts import get_object_or_404, render, redirect
 from funky_sheets.formsets import HotView
 from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
@@ -30,16 +30,9 @@ def Sponsorships(request):
     context = {'sponsorships':sponsorships,
                'sponsorshipForm': sponsorshipForm}
     
-    if request.method == 'POST':
-        form = SponsorshipForm(request.POST)
-    
-        if form.is_valid():
-            sponsorship = Sponsorship(commit=False)
-            sponsorship.save()
-            return HttpResponseRedirect('sponsorships.html')
-    else:
-        form = SponsorshipForm()
-        context['form'] = form
+
+    form = SponsorshipForm()
+    context['form'] = form
 
     context['segment'] = load_template
 
@@ -80,8 +73,7 @@ def Sponsorship_Add(request):
     if request.method == 'POST':
         form = SponsorshipForm(request.POST)
         if form.is_valid():
-            sponsorship = form.save(commit=False)
-            sponsorship.save()
+            form.save()
         else:
             form = SponsorshipForm()
         return HttpResponseRedirect('../sponsorships.html')
@@ -104,26 +96,10 @@ def Donation_Add(request):
     if request.method == 'POST':
         
         form = DonationForm(request.POST)
-
-        donor_id = request.POST.get('donor')
-        beneficiary_id = request.POST.get('beneficiary')
-
-        donor = Donor.objects.get(pk=donor_id)
-        giver = Giver.objects.get_or_create(donor=donor)
         
-        beneficiary = Beneficiary.objects.get(pk=beneficiary_id)
-        receiver = Receiver.objects.get(beneficiary=beneficiary)
-
-        receiver.beneficiary = beneficiary
         
         if form.is_valid():
-            donation = Donation()
-            donation.date = form.cleaned_data['date']
-            donation.amount = form.cleaned_data['amount']
-            donation.method = form.cleaned_data['method']
-            donation.donor = giver[0]
-            donation.beneficiary = receiver
-            
+            donation = form.save(commit=False)            
             donation.save()
         
             
@@ -144,8 +120,7 @@ def Donations(request):
     donors = Donor.objects.all()
     projects = SponsorshipType.objects.all()
     churches = Group.objects.all()
-    all_donors =  list(donors.values_list('id', 'name' )) + list(churches.values_list('id', 'name'))
-    print(type(churches.values_list()))
+    
     
     donationForm = DonationForm()
 
@@ -168,8 +143,6 @@ def Donations(request):
             print(form.errors)
     else:
         form = DonationForm()
-        form.fields['donor'].choices = [("", "---------")] + all_donors
-        form.fields['beneficiary'].queryset = students
         context['form'] = form
 
     context['segment'] = load_template
@@ -294,8 +267,6 @@ def pages(request):
                 student.save()
                 #donor = form.cleaned_data['donor'].first()
                 #student.sponsor.add(newSponsor)
-                beneficiary = Receiver()
-                beneficiary.beneficiary = student
                 form.save_m2m()
 
                 return HttpResponseRedirect('students.html')
@@ -310,9 +281,6 @@ def pages(request):
             if form.is_valid():
                 donor = form.save(commit=False)
                 donor.save()
-                giver = Giver()
-                giver.donor = donor
-                giver.save()
 
                 return HttpResponseRedirect('sponsors.html')
             else:
@@ -335,9 +303,6 @@ def pages(request):
             if form.is_valid():
                 church = form.save(commit=False)
                 church.save()
-                giver = Giver()
-                giver.group = church
-                giver.save()
 
                 return HttpResponseRedirect('groups.html')
             else:
@@ -442,7 +407,7 @@ def Sponsorship_Detail(request, id):
         form = SponsorshipForm(request.POST, instance=sponsorship)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('../sponsors.html')
+            return HttpResponseRedirect('../sponsorships.html')
     else:
         initial_data = {
             'type':sponsorship.type,
