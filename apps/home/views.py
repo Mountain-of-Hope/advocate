@@ -190,11 +190,11 @@ def pages(request):
 
                 resultsDonors = Donor.objects.filter(name__contains=searchText)
                 resultsStudents = Beneficiary.objects.filter(name__contains=searchText)
-                #resultsPaymentsDonor = Donation.objects.filter(donor__name__contains=searchText)
-                #resultsPaymentsStudent = Donation.objects.filter(student__name__contains=searchText)
+                resultsPaymentsDonor = Donation.objects.filter(donor__name__contains=searchText)
+                resultsPaymentsStudent = Donation.objects.filter(beneficiary__name__contains=searchText)
                 resultsPrograms = SponsorshipType.objects.filter(name__contains=searchText)
                 resultsGroups = Group.objects.filter(name__contains=searchText)
-                results = chain(resultsDonors, resultsStudents, resultsPrograms, resultsGroups)
+                results = chain(resultsDonors, resultsStudents, resultsPrograms, resultsGroups, resultsPaymentsDonor, resultsPaymentsStudent)
 
                 context['results'] = results
                 context['searchTerm'] = searchText
