@@ -59,7 +59,7 @@ class SponsorshipType(models.Model):
     
 class Donor(Person):
     #sponsorships = models.ManyToManyField(Sponsorship, blank=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.PROTECT, blank=True, null=True)
     #donations = GenericRelation(Donation, related_query_name='donations')
     
 

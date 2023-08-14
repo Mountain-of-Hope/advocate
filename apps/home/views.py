@@ -356,7 +356,7 @@ def Group_Detail(request, id):
     else:
         initial_data = {
             'name':group.name,
-            'address':group.address.raw,
+            'address':group.address,
             'email':group.email,
             'phone':group.phone
         }

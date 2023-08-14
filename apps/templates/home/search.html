@@ -53,13 +53,13 @@
                                                                <th scope="row">{{r.id}}</th>
 
                                                                 {% if r|get_type == "Donor" %}
-                                                                <td><a href="../donor/{{r.id}}">{{r.name}}</a> (Donor)</td>
+                                                                <td><a href="../sponsor/{{r.id}}">{{r.name}}</a> (Donor)</td>
                                                                 
                                                                 {% elif r|get_type == "Beneficiary"%}
-                                                                <td><a href="../beneficiary/{{r.id}}">{{r.name}} </a> (Student)</td>
+                                                                <td><a href="../student/{{r.id}}">{{r.name}} </a> (Student)</td>
                                                                 
                                                                 {% elif r|get_type == "Program"%}
-                                                                <td><a href="../sponsorshiptype/{{r.id}}">{{r.name}}</a> (Program)</td>
+                                                                <td><a href="../program/{{r.id}}">{{r.name}}</a> (Program)</td>
                                                                 
                                                                 {% elif r|get_type == "Church"%}
                                                                 <td><a href="../group/{{r.id}}">{{r.name}}</a> (Group)</td>
