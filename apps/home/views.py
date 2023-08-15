@@ -374,6 +374,7 @@ def Group_Detail(request, id):
 def Sponsor_Detail(request, id):
     donor = Donor.objects.get(id=id)
     template = loader.get_template('home/sponsor.html')
+    sponsorships = Sponsorship.objects.filter(donor=donor)
     donations = Donation.objects.filter(donor=donor)
 
 
@@ -396,6 +397,7 @@ def Sponsor_Detail(request, id):
     context = {
         'sponsor':donor,
         'donations':donations,
+        'sponsorships': sponsorships,
         'form': donorform,
     }
     return HttpResponse(template.render(context, request))
