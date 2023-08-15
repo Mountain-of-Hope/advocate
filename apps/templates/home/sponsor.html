@@ -41,6 +41,7 @@
                                             </div>
                                             <div class="card-block table-border-style">
                                                 <div class="table-responsive">
+                                                    {% if donations %}
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
@@ -51,7 +52,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                             {% for donation in donations %}
                                                                 <tr>
                                                                     <th scope="row"><a href="../donation/{{donation.id}}">{{donation.id}}</a></th>
@@ -60,9 +60,11 @@
                                                                     <td>{{donation.amount}}</td>
                                                                 </tr>
                                                             {% endfor %}
-        
                                                         </tbody>
                                                     </table>
+                                                    {%else %}
+                                                        No donations recorded.
+                                                    {%endif%}
                                                 </div>
                                             </div>
                                         </div>
@@ -74,37 +76,41 @@
                                             </div>
                                             <div class="card-block table-border-style">
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Sponsorship ID</th>
-                                                                <th>Begin Date</th>
-                                                                <th>Beneficiary</th>
-                                                                <th>Payment Interval</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                            {% for sponsorship in sponsorships %}
+                                                    {% if sponsorships %}
+                                                        <table class="table table-striped">
+                                                            <thead>
                                                                 <tr>
-                                                                    <th scope="row"><a href="../sponsorship/{{sponsorship.id}}">{{sponsorship.id}}</a></th>
-                                                                    <td>{{sponsorship.begin_date}}</td>
-                                                                    <td>{{sponsorship.beneficiary}}</td>
-                                                                    {% if sponsorship.payment_interval == 1 %}
-                                                                        <td>Monthly</td>
-                                                                    {% elif sponsorship.payment_interval == 3 %}
-                                                                        <td>Quarterly</td>
-                                                                     {% elif sponsorship.payment_interval == 6 %}
-                                                                        <td>Biannual</td>
-                                                                    {% elif sponsorship.payment_interval == 12 %}
-                                                                        <td>Yearly</td>
-                                                                     {%endif%}
-                                                                  
+                                                                    <th>Sponsorship ID</th>
+                                                                    <th>Begin Date</th>
+                                                                    <th>Beneficiary</th>
+                                                                    <th>Payment Interval</th>
                                                                 </tr>
-                                                            {% endfor %}
-        
-                                                        </tbody>
-                                                    </table>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                {% for sponsorship in sponsorships %}
+                                                                    <tr>
+                                                                        <th scope="row"><a href="../sponsorship/{{sponsorship.id}}">{{sponsorship.id}}</a></th>
+                                                                        <td>{{sponsorship.begin_date}}</td>
+                                                                        <td>{{sponsorship.beneficiary}}</td>
+                                                                        {% if sponsorship.payment_interval == 1 %}
+                                                                            <td>Monthly</td>
+                                                                        {% elif sponsorship.payment_interval == 3 %}
+                                                                            <td>Quarterly</td>
+                                                                        {% elif sponsorship.payment_interval == 6 %}
+                                                                            <td>Biannual</td>
+                                                                        {% elif sponsorship.payment_interval == 12 %}
+                                                                            <td>Yearly</td>
+                                                                        {%endif%}
+                                                                    
+                                                                    </tr>
+                                                                {% endfor %}
+            
+                                                            </tbody>
+                                                        </table>
+                                                    {% else %}
+                                                        No sponsorships associated. 
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
