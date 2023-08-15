@@ -206,14 +206,15 @@ def pages(request):
 
 
         if load_template == 'overfunded.html':
+            sponsorships = Sponsorship.objects.all()
             overfunded_students = []
-            for student in students:
+            for sponsorship in sponsorships:
 
                 # How much should they have?
-                program_cost = SponsorshipType.objects.get(name=student.sponsorships).cost
                 funded_thru = datetime.now().date()
-                months_to_be_funded = diff_month(funded_thru, student.enroll_date)
-                expected_amount = program_cost * months_to_be_funded
+                months_to_be_funded = diff_month(funded_thru, sponsorship.beneficiary.enroll_date)
+                expected_amount = sponsorship.total_cost * months_to_be_funded
+
 
                 #need donor under/overfunded?
                 #why is the student over/underfunded?
@@ -221,39 +222,39 @@ def pages(request):
 
                 # How much do they actually have?
                 total = Decimal()
-                this_students_donations = Donation.objects.filter(student=student)
+                this_students_donations = Donation.objects.filter(beneficiary=sponsorship.beneficiary)
 
                 for p in this_students_donations:
                     total += p.amount
 
                 if total > expected_amount:
-                    overfunded_students.append(student)
-                    student.overfunded_amount = total-expected_amount
+                    overfunded_students.append(sponsorship)
+                    sponsorship.overfunded_amount = total-expected_amount
 
             context['overfunded'] = overfunded_students
 
 
         if load_template == 'underfunded.html':
+            sponsorships = Sponsorship.objects.all()
             underfunded_students = []
-            for student in students:
+            for sponsorship in sponsorships:
 
                 # How much should they have?
-                program_cost = SponsorshipType.objects.get(name=student.program).cost
                 funded_thru = datetime.now().date()
-                months_to_be_funded = diff_month(funded_thru, student.enroll_date)
-                expected_amount = program_cost * months_to_be_funded
+                months_to_be_funded = diff_month(funded_thru, sponsorship.beneficiary.enroll_date)
+                expected_amount = sponsorship.total_cost * months_to_be_funded
 
 
                 # How much do they actually have?
                 total = Decimal()
-                this_students_donations = Donation.objects.filter(student=student)
+                this_students_donations = Donation.objects.filter(beneficiary=sponsorship.beneficiary)
 
                 for p in this_students_donations:
                     total += p.amount
 
                 if total < expected_amount:
-                    underfunded_students.append(student)
-                    student.deficit_amount = total-expected_amount
+                    underfunded_students.append(sponsorship)
+                    sponsorship.deficit_amount = total-expected_amount
 
             context['underfunded'] = underfunded_students
 

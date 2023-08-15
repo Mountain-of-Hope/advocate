@@ -81,12 +81,12 @@ class Sponsorship(models.Model):
     payment_interval = models.IntegerField(choices=PAYMENT_INTERVALS, default='Monthly')
     additional_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     donor = models.ManyToManyField(Donor)
-    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.SET_NULL, null=True )
+    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE )
     # TODO: add status field?
 
     @property
     def total_cost(self):
-        return self.cost + self.additional_cost
+        return self.type.cost + self.additional_cost
     
     @property
     def is_active(self):
