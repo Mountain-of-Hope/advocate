@@ -347,6 +347,7 @@ def Donation_Detail(request, id):
 def Group_Detail(request, id):
     group = Group.objects.get(id=id)
     template = loader.get_template('home/group.html')
+    donations = Donation.objects.filter(group=group)
 
     if request.method == 'POST':
         form = GroupForm(request.POST, instance=group)
@@ -364,6 +365,7 @@ def Group_Detail(request, id):
 
     context = {
         'group':group,
+        'donations':donations,
         'form':form,
     }
     return HttpResponse(template.render(context, request))
@@ -372,6 +374,7 @@ def Group_Detail(request, id):
 def Sponsor_Detail(request, id):
     donor = Donor.objects.get(id=id)
     template = loader.get_template('home/sponsor.html')
+    donations = Donation.objects.filter(donor=donor)
 
 
     # TODO: fix address updating... currently, it just creates an entirely new record in address table
@@ -392,6 +395,7 @@ def Sponsor_Detail(request, id):
 
     context = {
         'sponsor':donor,
+        'donations':donations,
         'form': donorform,
     }
     return HttpResponse(template.render(context, request))

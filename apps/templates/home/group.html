@@ -34,6 +34,40 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-xl-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Donations</h5>
+                                            </div>
+                                            <div class="card-block table-border-style">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Donation ID</th>
+                                                                <th>Date</th>
+                                                                <th>Purpose</th>
+                                                                <th>Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {% for donation in donations %}
+                                                                <tr>
+                                                                    <th scope="row"><a href="../donation/{{donation.id}}">{{donation.id}}</a></th>
+                                                                    <td>{{donation.date}}</td>
+                                                                    <td>{{donation.beneficiary}}</td>
+                                                                    <td>{{donation.amount}}</td>
+                                                                </tr>
+                                                            {% endfor %}
+        
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <button type="button" class="btn btn-danger" title="" data-toggle="modal" data-original-title="Delete this group" data-target="#delete" aria-describedby="Delete this student">Delete</button>
                                 </div>
                             </div>

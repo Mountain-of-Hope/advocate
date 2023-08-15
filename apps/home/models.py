@@ -59,7 +59,7 @@ class SponsorshipType(models.Model):
     
 class Donor(Person):
     #sponsorships = models.ManyToManyField(Sponsorship, blank=True)
-    group = models.ForeignKey(Group, on_delete=models.PROTECT, blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.SET_NULL, blank=True, null=True)
     #donations = GenericRelation(Donation, related_query_name='donations')
     
 
@@ -75,13 +75,13 @@ class Beneficiary(Person):
         return self.name
 
 class Sponsorship(models.Model):
-    type = models.ForeignKey(SponsorshipType, on_delete=models.CASCADE)
+    type = models.ForeignKey(SponsorshipType, on_delete=models.SET_NULL, null=True)
     begin_date = models.DateField(blank=True)
     end_date = models.DateField(blank=True, null=True)
     payment_interval = models.IntegerField(choices=PAYMENT_INTERVALS, default='Monthly')
     additional_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     donor = models.ManyToManyField(Donor)
-    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.PROTECT)
+    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.SET_NULL, null=True )
     # TODO: add status field?
 
     @property
