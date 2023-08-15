@@ -25,7 +25,7 @@
                                         <div class="card-block">
                                             <div class="row">
 
-                                                <form action="{{payment.id}}" method="POST">
+                                                <form action="{{donation.id}}" method="POST">
                                                     {% csrf_token %}
                                                     {{form.as_p}}
                                                     <input type="submit" value="Submit">

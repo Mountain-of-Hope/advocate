@@ -8,14 +8,37 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.core.paginator import Paginator
-from .forms import PaymentForm, ChurchForm, DonorForm, StudentForm, ProgramForm
-from django.urls import reverse
-from .models import Payment, Student, Church, Donor, Program, AddressField
+from .forms import DonationForm, GroupForm, DonorForm, StudentForm, SponsorshipTypeForm, SponsorshipForm
+from django.urls import reverse, reverse_lazy
+from .models import Donation, Beneficiary, Group, Donor, SponsorshipType, Sponsorship
 from django.shortcuts import get_object_or_404, render, redirect
+from funky_sheets.formsets import HotView
+from django.forms import CheckboxSelectMultiple, CheckboxInput, DateInput
 from datetime import datetime
 import csv, io
 from decimal import *
 from itertools import chain
+
+
+@login_required
+def Sponsorships(request):
+    load_template = request.path.split('/')[-1]
+    sponsorships = Sponsorship.objects.all()
+    sponsorshipForm = SponsorshipForm()
+
+
+    context = {'sponsorships':sponsorships,
+               'sponsorshipForm': sponsorshipForm}
+    
+
+    form = SponsorshipForm()
+    context['form'] = form
+
+    context['segment'] = load_template
+
+    html_template = loader.get_template('home/' + load_template)
+    return HttpResponse(html_template.render(context, request))
+
 
 @login_required
 def get_sponsor_email(request, id=None):
@@ -28,68 +51,122 @@ def get_sponsor_email(request, id=None):
 
 @login_required(login_url="/login/")
 def index(request):
-
+    
     if request.method == 'POST':
-        form = PaymentForm(request.POST)
+        form = DonationForm(request.POST)
         if form.is_valid():
-            pay = Payment()
-            pay.donor = Donor.objects.get(pk=form['donor'].data)
-            pay.amount = form['amount'].data
-            pay.checkNumber = form['checkNumber'].data
-            pay.date = form['date'].data
-            pay.method = form['method'].data
-            pay.duration = form['duration'].data
-
-            pay.save()
-            return HttpResponseRedirect('payments.html')
+            donation = form.save(commit=False)
+            donation.save()
+            return HttpResponseRedirect('donations.html')
     else:
-        form = PaymentForm()
-        context = {'payForm':form}
-        # context['form'] = form
+        form = DonationForm()
+        context = {'donationForm':form}
 
-    #context = {'segment': 'index'}
     context['segment'] = 'index'
 
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
 
+@login_required
+def Sponsorship_Add(request):
+
+    if request.method == 'POST':
+        form = SponsorshipForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            form = SponsorshipForm()
+        return HttpResponseRedirect('../sponsorships.html')
+
+@login_required
 def Sponsor_Add(request):
 
-        if request.method == 'POST':
-            form = DonorForm(request.POST)
-            if form.is_valid():
-                donor = form.save(commit=False)
-                donor.save()
-            else:
-                form = DonorForm()
-            return HttpResponseRedirect('../sponsors.html')
+    if request.method == 'POST':
+        form = DonorForm(request.POST)
+        if form.is_valid():
+            donor = form.save(commit=False)
+            donor.save()
+        else:
+            form = DonorForm()
+        return HttpResponseRedirect('../sponsors.html')
 
-
+@login_required
 def Donation_Add(request):
 
-        if request.method == 'POST':
-            form = PaymentForm(request.POST)
-            if form.is_valid():
-                pay = form.save(commit=False)
-                pay.save()
-            else:
-                form = PaymentForm()
-            return HttpResponseRedirect('../payments.html')
+    if request.method == 'POST':
+        
+        form = DonationForm(request.POST)
+        
+        
+        if form.is_valid():
+            donation = form.save(commit=False)            
+            donation.save()
+        
+            
+
+
+
+    else:
+        print(form.errors.values)
+        form = DonationForm()
+            
+    return HttpResponseRedirect('../donations.html')
+    
+@login_required
+def Donations(request):
+    load_template = request.path.split('/')[-1]
+    donations = Donation.objects.all()
+    students = Beneficiary.objects.all()
+    donors = Donor.objects.all()
+    projects = SponsorshipType.objects.all()
+    churches = Group.objects.all()
+    
+    
+    donationForm = DonationForm()
+
+    context = {'students':students,
+               'donations':donations,
+               'donors':donors,
+               'projects':projects,
+               'churches':churches,
+               'donationForm': donationForm
+               }
+    
+    if request.method == 'POST':
+        form = DonationForm(request.POST)
+    
+        if form.is_valid():
+            donation = Donation(commit=False)
+            donation.save()
+            return HttpResponseRedirect('donations.html')
+        else:
+            print(form.errors)
+    else:
+        form = DonationForm()
+        context['form'] = form
+
+    context['segment'] = load_template
+
+    html_template = loader.get_template('home/' + load_template)
+    return HttpResponse(html_template.render(context, request))
+
+def Donors(request):
+    pass
 
 
 # needs to be refactored to use dedicated functions for each view
 @login_required(login_url="/login/")
 def pages(request):
-    pays = Payment.objects.all()
-    students = Student.objects.all()
+    pays = Donation.objects.all()
+    students = Beneficiary.objects.all()
     donors = Donor.objects.all()
-    paymentForm = PaymentForm()
+    paymentForm = DonationForm()
 
 
-    projects = Program.objects.all()
-    churches = Church.objects.all()
+    projects = SponsorshipType.objects.all()
+    churches = Group.objects.all()
     context = {'students':students,
-               'payments':pays,
+               'donations':pays,
                'donors':donors,
                'projects':projects,
                'churches':churches,
@@ -102,6 +179,7 @@ def pages(request):
     try:
 
         load_template = request.path.split('/')[-1]
+        
 
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
@@ -111,11 +189,11 @@ def pages(request):
                 searchText = request.POST['search-text']
 
                 resultsDonors = Donor.objects.filter(name__contains=searchText)
-                resultsStudents = Student.objects.filter(name__contains=searchText)
-                resultsPaymentsDonor = Payment.objects.filter(donor__name__contains=searchText)
-                resultsPaymentsStudent = Payment.objects.filter(student__name__contains=searchText)
-                resultsPrograms = Program.objects.filter(name__contains=searchText)
-                resultsGroups = Church.objects.filter(name__contains=searchText)
+                resultsStudents = Beneficiary.objects.filter(name__contains=searchText)
+                resultsPaymentsDonor = Donation.objects.filter(donor__name__contains=searchText)
+                resultsPaymentsStudent = Donation.objects.filter(beneficiary__name__contains=searchText)
+                resultsPrograms = SponsorshipType.objects.filter(name__contains=searchText)
+                resultsGroups = Group.objects.filter(name__contains=searchText)
                 results = chain(resultsDonors, resultsStudents, resultsPrograms, resultsGroups, resultsPaymentsDonor, resultsPaymentsStudent)
 
                 context['results'] = results
@@ -128,14 +206,15 @@ def pages(request):
 
 
         if load_template == 'overfunded.html':
+            sponsorships = Sponsorship.objects.all()
             overfunded_students = []
-            for student in students:
+            for sponsorship in sponsorships:
 
                 # How much should they have?
-                program_cost = Program.objects.get(name=student.program).cost
                 funded_thru = datetime.now().date()
-                months_to_be_funded = diff_month(funded_thru, student.enroll_date)
-                expected_amount = program_cost * months_to_be_funded
+                months_to_be_funded = diff_month(funded_thru, sponsorship.beneficiary.enroll_date)
+                expected_amount = sponsorship.total_cost * months_to_be_funded
+
 
                 #need donor under/overfunded?
                 #why is the student over/underfunded?
@@ -143,76 +222,53 @@ def pages(request):
 
                 # How much do they actually have?
                 total = Decimal()
-                this_students_donations = Payment.objects.filter(student=student)
+                this_students_donations = Donation.objects.filter(beneficiary=sponsorship.beneficiary)
 
                 for p in this_students_donations:
                     total += p.amount
 
                 if total > expected_amount:
-                    overfunded_students.append(student)
-                    student.overfunded_amount = total-expected_amount
+                    overfunded_students.append(sponsorship)
+                    sponsorship.overfunded_amount = total-expected_amount
 
             context['overfunded'] = overfunded_students
 
 
         if load_template == 'underfunded.html':
+            sponsorships = Sponsorship.objects.all()
             underfunded_students = []
-            for student in students:
+            for sponsorship in sponsorships:
 
                 # How much should they have?
-                program_cost = Program.objects.get(name=student.program).cost
                 funded_thru = datetime.now().date()
-                months_to_be_funded = diff_month(funded_thru, student.enroll_date)
-                expected_amount = program_cost * months_to_be_funded
+                months_to_be_funded = diff_month(funded_thru, sponsorship.beneficiary.enroll_date)
+                expected_amount = sponsorship.total_cost * months_to_be_funded
 
 
                 # How much do they actually have?
                 total = Decimal()
-                this_students_donations = Payment.objects.filter(student=student)
+                this_students_donations = Donation.objects.filter(beneficiary=sponsorship.beneficiary)
 
                 for p in this_students_donations:
                     total += p.amount
 
                 if total < expected_amount:
-                    underfunded_students.append(student)
-                    student.deficit_amount = total-expected_amount
+                    underfunded_students.append(sponsorship)
+                    sponsorship.deficit_amount = total-expected_amount
 
             context['underfunded'] = underfunded_students
 
 
-        # hacked, needs to be refactored, extract to individual methods
-        if load_template == 'payments.html':
-            if request.method == 'POST':
-                form = PaymentForm(request.POST)
-                if form.is_valid():
-                    pay = Payment()
-                    pay.donor = Donor.objects.get(pk=form['donor'].data)
-                    pay.amount = form['amount'].data
-                    pay.checkNumber = form['checkNumber'].data
-                    pay.date = form['date'].data
-                    pay.student = Student.objects.get(pk=form['student'].data)
-                    pay.method = form['method'].data
-                    pay.save()
-
-                    return HttpResponseRedirect('payments.html')
-            else:
-                form = PaymentForm()
-                context['form'] = form
 
 
         if load_template == 'students.html':
             form = StudentForm(request.POST)
             if form.is_valid():
                 student = form.save(commit=False)
-                #testEnroll = '2021/10/20'
-                #student.enroll_date = datetime.strptime(testEnroll, "%Y/%m/%d")
-                student.enroll_date = datetime.now()
                 student.save()
-                newSponsor = form.cleaned_data['sponsor'].first()
-                student.sponsor.add(newSponsor)
+                #donor = form.cleaned_data['donor'].first()
+                #student.sponsor.add(newSponsor)
                 form.save_m2m()
-
-
 
                 return HttpResponseRedirect('students.html')
             else:
@@ -233,28 +289,25 @@ def pages(request):
                 context['form'] = form
 
         if load_template == 'programs.html':
-            form = ProgramForm(request.POST)
+            form = SponsorshipTypeForm(request.POST)
             if form.is_valid():
-                program = Program()
-                program.name = form['name'].data
-                program.type = form['type'].data
-                program.description = form['description'].data
+                program = form.save(commit=False)
                 program.save()
 
                 return HttpResponseRedirect('programs.html')
             else:
-                form = ProgramForm()
+                form = SponsorshipTypeForm()
                 context['form'] = form
 
         if load_template == 'groups.html':
-            form = ChurchForm(request.POST)
+            form = GroupForm(request.POST)
             if form.is_valid():
                 church = form.save(commit=False)
                 church.save()
 
                 return HttpResponseRedirect('groups.html')
             else:
-                form = ChurchForm()
+                form = GroupForm()
                 context['form'] = form
 
 
@@ -273,80 +326,114 @@ def pages(request):
         return HttpResponse(html_template.render(context, request)) """
 
 @login_required(login_url="/login/")
-def Payment_Detail(request, id):
-    payment = Payment.objects.get(id=id)
-    template = loader.get_template('home/payment.html')
+def Donation_Detail(request, id):
+    donation = Donation.objects.get(id=id)
+    template = loader.get_template('home/donation.html')
 
     if request.method == 'POST':
-        form = PaymentForm(request.POST, instance=payment)
+        form = DonationForm(request.POST, instance=donation)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('../payments.html')
+            return HttpResponseRedirect('../donations.html')
     else:
-        payform = PaymentForm(instance=payment)
+        payform = DonationForm(instance=donation)
 
     context = {
-        'payment':payment,
+        'donation':donation,
         'form':payform,
     }
     return HttpResponse(template.render(context, request))
 
 @login_required(login_url="/login/")
 def Group_Detail(request, id):
-    group = Church.objects.get(id=id)
+    group = Group.objects.get(id=id)
     template = loader.get_template('home/group.html')
+    donations = Donation.objects.filter(group=group)
 
     if request.method == 'POST':
-        form = ChurchForm(request.POST, instance=group)
+        form = GroupForm(request.POST, instance=group)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('../groups.html')
     else:
         initial_data = {
             'name':group.name,
-            'address':group.address.raw,
+            'address':group.address,
             'email':group.email,
             'phone':group.phone
         }
-        form = ChurchForm(instance=group, initial=initial_data)
+        form = GroupForm(instance=group, initial=initial_data)
 
     context = {
         'group':group,
+        'donations':donations,
         'form':form,
     }
     return HttpResponse(template.render(context, request))
 
 @login_required(login_url="/login/")
 def Sponsor_Detail(request, id):
-    sponsor = Donor.objects.get(id=id)
+    donor = Donor.objects.get(id=id)
     template = loader.get_template('home/sponsor.html')
+    sponsorships = Sponsorship.objects.filter(donor=donor)
+    donations = Donation.objects.filter(donor=donor)
 
 
     # TODO: fix address updating... currently, it just creates an entirely new record in address table
     if request.method == 'POST':
-        form = DonorForm(request.POST, instance=sponsor)
+        form = DonorForm(request.POST, instance=donor)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('../sponsors.html')
     else:
         initial_data = {
-            'name':sponsor.name,
-            'address':sponsor.address.raw,
-            'email':sponsor.email,
-            'phone':sponsor.phone,
-            'church':sponsor.church
+            'name':donor.name,
+            'address':donor.address,
+            'email':donor.email,
+            'phone':donor.phone,
+            'group':donor.group
         }
-        sponsorform = DonorForm(instance=sponsor, initial=initial_data)
+        donorform = DonorForm(instance=donor, initial=initial_data)
 
     context = {
-        'sponsor':sponsor,
-        'form': sponsorform,
+        'sponsor':donor,
+        'donations':donations,
+        'sponsorships': sponsorships,
+        'form': donorform,
+    }
+    return HttpResponse(template.render(context, request))
+
+@login_required(login_url="/login/")
+def Sponsorship_Detail(request, id):
+    sponsorship = Sponsorship.objects.get(id=id)
+    template = loader.get_template('home/sponsorship.html')
+
+
+    # TODO: fix address updating... currently, it just creates an entirely new record in address table
+    if request.method == 'POST':
+        form = SponsorshipForm(request.POST, instance=sponsorship)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('../sponsorships.html')
+    else:
+        initial_data = {
+            'type':sponsorship.type,
+            'begin_date':sponsorship.begin_date,
+            'end_date':sponsorship.end_date,
+            'payment_interval':sponsorship.payment_interval,
+            'additional_cost':sponsorship.additional_cost
+        }
+        sponsorshipForm = SponsorshipForm(instance=sponsorship, initial=initial_data)
+
+    context = {
+        'sponsor':sponsorship,
+        'form': sponsorshipForm,
     }
     return HttpResponse(template.render(context, request))
 
 @login_required(login_url="/login/")
 def Student_Detail(request, id):
-    student = Student.objects.get(id=id)
+    student = Beneficiary.objects.get(id=id)
     template = loader.get_template('home/student.html')
 
     if request.method == 'POST':
@@ -365,16 +452,16 @@ def Student_Detail(request, id):
 
 @login_required(login_url="/login/")
 def Program_Detail(request, id):
-    program = Program.objects.get(id=id)
+    program = SponsorshipType.objects.get(id=id)
     template = loader.get_template('home/program.html')
 
     if request.method == 'POST':
-        form = ProgramForm(request.POST, instance=program)
+        form = SponsorshipTypeForm(request.POST, instance=program)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('../programs.html')
     else:
-        form = ProgramForm(instance=program)
+        form = SponsorshipTypeForm(instance=program)
 
     context = {
         'program':program,
@@ -386,11 +473,11 @@ def Program_Detail(request, id):
 @login_required(login_url="/login/")
 def Delete_Data(request):
 
-    Payment.objects.all().delete()
-    Program.objects.all().delete()
+    Donation.objects.all().delete()
+    SponsorshipType.objects.all().delete()
     Donor.objects.all().delete()
-    Student.objects.all().delete()
-    Church.objects.all().delete()
+    Beneficiary.objects.all().delete()
+    Group.objects.all().delete()
 
 
     return HttpResponseRedirect('../')
@@ -445,9 +532,9 @@ def Upload_Students(request):
         data = [line for line in reader]
 
         for d in data:
-            created = Student(
+            created = Beneficiary(
                 name = d['name'],
-                program = Program.objects.get(name=d['program']),
+                program = SponsorshipType.objects.get(name=d['program']),
                 community = d['community'],
                 grade = d['grade'],
                 enroll_date = datetime.now()
@@ -458,59 +545,37 @@ def Upload_Students(request):
 
         return HttpResponseRedirect('../students.html')
 
+def Sponsorship_Delete(request, id):
+    sponsorship = Sponsorship.objects.get(pk=id)
+    sponsorship.delete()
+    return HttpResponseRedirect("../../sponsorships.html")
 
 def Sponsor_Delete(request, id):
+    #figure out what to do with this sponsor's associated records (donations, beneficiaries, groups, etc)
     sponsor = Donor.objects.get(pk=id)
     sponsor.delete()
     return HttpResponseRedirect("../../sponsors.html")
 
 def Student_Delete(request, id):
-    student = Student.objects.get(pk=id)
+    student = Beneficiary.objects.get(pk=id)
     student.delete()
     return HttpResponseRedirect("../../students.html")
 
 def Group_Delete(request, id):
-    group = Church.objects.get(pk=id)
+    group = Group.objects.get(pk=id)
     group.delete()
     return HttpResponseRedirect("../../groups.html")
 
 def Program_Delete(request, id):
-    prog = Program.objects.get(pk=id)
+    prog = SponsorshipType.objects.get(pk=id)
     prog.delete()
     return HttpResponseRedirect("../../programs.html")
 
-def Payment_Delete(request, id):
-    payment = Payment.objects.get(pk=id)
-    payment.delete()
-    return HttpResponseRedirect("../../payments.html")
+def Donation_Delete(request, id):
+    donation = Donation.objects.get(pk=id)
+    donation.delete()
+    return HttpResponseRedirect("../../donations.html")
 
 #from top solution here: https://stackoverflow.com/questions/4039879/best-way-to-find-the-months-between-two-dates
 def diff_month(d1, d2):
     return (d1.year - d2.year) * 12 + d1.month - d2.month
-
-def display_latestnews(request):
-
-    newsdata = Donor.objects.all()
-    # articles per page
-    per_page = 4
-    # Paginator in a view function to paginate a queryset
-    # show 4 news per page
-    obj_paginator = Paginator(newsdata, per_page)
-    # list of objects on first page
-    first_page = obj_paginator.page(1).object_list
-    # range iterator of page numbers
-    page_range = obj_paginator.page_range
-
-    context = {
-    'obj_paginator':obj_paginator,
-    'first_page':first_page,
-    'page_range':page_range
-    }
-    #
-    if request.method == 'POST':
-        #getting page number
-        page_no = request.POST.get('page_no', None)
-        results = list(obj_paginator.page(page_no).object_list.values('id', 'title','content'))
-        return JsonResponse({"results":results})
-
-    return render(request, 'home/test.html',context)

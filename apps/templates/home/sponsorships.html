@@ -1,0 +1,179 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Payments {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Sponsorships</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="#!">Sponsorship</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">All Sponsorships</a></li>
+                                    </ul>
+                                        <!--<button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#importPayment" aria-describedby="Import Payments from Excel">Import</button>-->
+                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a sponsor" data-target="#sponsorModal" aria-describedby="Import Payments from Excel">Add Sponsorship</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+
+                            <div class="row">
+                                <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sponsorship ID</th>
+                                                            <th>Begin Date</th>
+                                                            <th>Sponsor</th>
+                                                            <th>Student</th>
+                                                            <th>Payment Interval</th>
+                                                            <th>Add. Cost</th>
+                                                            <th class="text-right"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for i in sponsorships %}
+
+                                                            <tr>
+                                                                <th scope="row">{{i.id}}</th>
+                                                                <td>{{i.begin_date}}</td>
+                                                                {% if i.donor.all %}    
+                                                                  {% for d in i.donor.all %}
+                                                                    <td>{{ d }}</td>
+                                                                  {% endfor%}
+                                                                {% else %}
+                                                                    <td> - </td>
+                                                                {%endif%}
+                                                                
+                                                                
+                                                                  
+                                                                
+
+                                                                <td>{{ i.beneficiary }}</td>
+
+                                                                {% if i.payment_interval == 1 %}
+                                                                  <td>Monthly</td>
+                                                                {% elif i.payment_interval == 3 %}
+                                                                  <td>Quarterly</td>
+                                                                {% elif i.payment_interval == 6 %}
+                                                                  <td>Biannual</td>
+                                                                {% elif i.payment_interval == 12 %}
+                                                                  <td>Yearly</td>
+                                                                {%endif%}
+                                                                <td>${{i.additional_cost}}</td>
+                                                                <td>
+                                                                    <a href="sponsorship/{{i.id}}">
+                                                                        <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit"></button>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% comment %} Add item Modal {% endcomment %}
+        <div class="modal fade" id="sponsorModal" tabindex="-1" role="dialog" aria-labelledby="sponsorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="sponsorModalLabel">Add Sponsorship</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form action="sponsorship/add" method="POST">
+                        {% csrf_token %}
+                        <table>
+                            {{form.as_table}}
+                        </table>
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
+        {% comment %} Email Modal {% endcomment %}
+        <div class="modal fade" id="importPayment" tabindex="-1" role="dialog" aria-labelledby="importPaymentModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="importPaymentModalLabel">Import Payments</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="payment-import-file-name" class="col-form-label">Choose a file:</label>
+                      <input type="file" class="form-control" id="payment-import-file">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Begin Import</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+{% comment %} 
+    POTENTIALLY USE THIS TO MAKE THE TABLES CLICKABLE
+<script>
+    $(document).ready(function(){
+    $('tbody tr').click(function(){
+      window.location = $(this).data('href');
+      return false;
+    });
+  });
+</script> {% endcomment %}
+  
+  {% endblock javascripts %}
+
+

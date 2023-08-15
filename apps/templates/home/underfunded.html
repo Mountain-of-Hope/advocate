@@ -49,7 +49,7 @@
                                                 <table class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>Sponsorship ID#</th>
                                                             <th>Student Name</th>
                                                             <th>Sponsor</th>
                                                             <th>Deficit Amount</th>
@@ -59,8 +59,8 @@
                                                         {% for i in underfunded %}
                                                         <tr>
                                                             <th scope="row">{{i.id}}</th>
-                                                            <td><a href="student/{{i.id}}">{{i.name}}</a></td>
-                                                            {% for s in i.sponsor.all %}
+                                                            <td>{{i.beneficiary}}</td>
+                                                            {% for s in i.donor.all %}
                                                                 <td>{{s}}</td>
                                                             {% empty %}
                                                                 <td>-</td>

@@ -55,7 +55,7 @@
                                                                 {% if r|get_type == "Donor" %}
                                                                 <td><a href="../sponsor/{{r.id}}">{{r.name}}</a> (Donor)</td>
                                                                 
-                                                                {% elif r|get_type == "Student"%}
+                                                                {% elif r|get_type == "Beneficiary"%}
                                                                 <td><a href="../student/{{r.id}}">{{r.name}} </a> (Student)</td>
                                                                 
                                                                 {% elif r|get_type == "Program"%}
@@ -64,8 +64,8 @@
                                                                 {% elif r|get_type == "Church"%}
                                                                 <td><a href="../group/{{r.id}}">{{r.name}}</a> (Group)</td>
                                                                 
-                                                                {% elif r|get_type == "Payment"%}
-                                                                <td><a href="../payment/{{r.id}}">{{r.donor}}</a> (Payment)  --  ${{r.amount}}  --  {{r.date}}</td>
+                                                                {% elif r|get_type == "Donation"%}
+                                                                <td><a href="../donation/{{r.id}}">{{r.donor}}</a> (Donation)  --  ${{r.amount}}  --  {{r.date}}</td>
                                                                 {% endif %} 
 
                                                                 

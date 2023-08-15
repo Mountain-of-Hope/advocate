@@ -11,13 +11,11 @@ cryptography
 defusedxml
 dj-database-url
 Django
-django-address
 django-allauth
 django-environ
 django-feather
-django-phonenumber-field
-django-pwa
 django-sslserver
+django-funky-sheets
 gunicorn
 idna
 jmespath

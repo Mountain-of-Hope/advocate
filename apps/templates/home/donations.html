@@ -18,15 +18,15 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12">
                                     <div class="page-header-title">
-                                        <h5 class="m-b-10">Payments</h5>
+                                        <h5 class="m-b-10">Donations</h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="#!">Payments</a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">All Payments</a></li>
+                                        <li class="breadcrumb-item"><a href="#!">Donations</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">All Donations</a></li>
                                     </ul>
-                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#importPayment" aria-describedby="Import Payments from Excel">Import</button>
-                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a manual payment" data-target="#paymentModal" aria-describedby="Import Payments from Excel">Add Payment</button>
+                                        <!--<button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Import Payments from Excel" data-target="#importPayment" aria-describedby="Import Payments from Excel">Import</button>-->
+                                        <button type="button" class="btn btn-primary" title="" data-toggle="modal" data-original-title="Add a manual payment" data-target="#paymentModal" aria-describedby="Import Payments from Excel">Record Donation</button>
                                 </div>
                             </div>
                         </div>
@@ -45,32 +45,41 @@
                                                 <table class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>Donation #</th>
                                                             <th>Donor</th>
-                                                            <th>Student</th>
+                                                            <th>Purpose</th>
                                                             <th>Method</th>
                                                             <th>Amount</th>
-                                                            <th>Duration (Days)</th>
                                                             <th>Date</th>
                                                             <th class="text-right"></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {% for i in payments %}
-                                                        <tr>
-                                                            <th scope="row">{{i.id}}</th>
-                                                            <td>{{i.donor}}</td>
-                                                            <td>{{i.student}}</td>
-                                                            <td>{{i.method}}</td>
-                                                            <td>{{i.amount}}</td>
-                                                            <td>{{i.duration}}</td>
-                                                            <td>{{i.date}}</td>
-                                                            <td>
-                                                                <a href="payment/{{i.id}}">
-                                                                    <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit" data-toggle="modal" data-target="#emailModal"></button>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
+                                                        {% for i in donations %}
+                                                            
+                                                            <tr>
+                                                                <th scope="row">{{i.id}}</th>
+                                                                <td>
+                                                                    {% if i.donor and i.group %}
+                                                                        {{i.donor}} ({{i.group}})
+                                                                    {% elif i.donor %}
+                                                                        {{i.donor}}
+                                                                    {% elif i.group %}
+                                                                        {{i.group}}
+                                                                    {% else %}
+                                                                        Unknown Donor
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>{{i.beneficiary}}</td>
+                                                                <td>{{i.method}}</td>
+                                                                <td>{{i.amount}}</td>
+                                                                <td>{{i.date}}</td>
+                                                                <td>
+                                                                    <a href="donation/{{i.id}}">
+                                                                        <button type="button" class="btn btn-sqaure btn-outline-primary f-10 feather icon-edit"></button>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
                                                         {% endfor %}
                                                     </tbody>
                                                 </table>
@@ -117,4 +126,20 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+
+
+{% comment %} 
+    POTENTIALLY USE THIS TO MAKE THE TABLES CLICKABLE
+<script>
+    $(document).ready(function(){
+    $('tbody tr').click(function(){
+      window.location = $(this).data('href');
+      return false;
+    });
+  });
+</script> {% endcomment %}
+  
+  {% endblock javascripts %}
+
+
