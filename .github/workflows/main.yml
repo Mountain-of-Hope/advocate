@@ -3,7 +3,7 @@
 name: CI-CD pipeline to AWS Production
 env:
   EB_S3_BUCKET_NAME: "advocate-build"
-  EB_APPLICATION_NAME: "Advocate-env"
+  EB_APPLICATION_NAME: "Advocate"
   EB_ENVIRONMENT_NAME: "Advocate-env"
   DEPLOY_PACKAGE_NAME: "django-app-${{ github.sha }}.zip"
   AWS_REGION_NAME: "us-east-1"
