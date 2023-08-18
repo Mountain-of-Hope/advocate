@@ -31,7 +31,7 @@ def login_view(request):
     return render(request, "accounts/login.html", {"form": form, "msg": msg, "GITHUB_AUTH": GITHUB_AUTH})
 
 
-def register_user(request):
+def register(request):
     msg = None
     success = False
 
