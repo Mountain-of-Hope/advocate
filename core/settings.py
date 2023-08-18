@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',       # OAuth new
     'allauth.socialaccount.providers.twitter',      # OAuth new
     "sslserver",
-    "funky_sheets",
 ]
 
 MIDDLEWARE = [
@@ -160,12 +159,6 @@ STATICFILES_DIRS = (
 )
 
 #############################################################
-# Google Maps API
-GOOGLE_API_KEY = ''
-
-#############################################################
-PHONENUMBER_FORMAT_REGION = 'US'
-
 # OAuth settings
 
 GITHUB_ID     = os.getenv('GITHUB_ID', None)
